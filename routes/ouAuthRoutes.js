@@ -11,5 +11,7 @@ const ouAuth = new OrgUnitsAuth(dbConnect);
 
 router.post('/test', ouAuth.testLogin());
 
+router.post('/auth', ouAuth.loginAuth());
+
 export default router;
 

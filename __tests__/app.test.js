@@ -4,10 +4,12 @@
 import DbHandler from '../database/DbHandler.js';
 
 import userPasswordTest from './userPasswordTest.js';
+import loginTest from './loginTest.js';
 
 const dbHandler = new DbHandler();
 
 userPasswordTest();
+loginTest();
 
 after(() => {
   dbHandler.closeDbConnection();
