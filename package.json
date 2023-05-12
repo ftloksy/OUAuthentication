@@ -6,8 +6,9 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha __tests__/app.test.js",
+    "start": "nodemon app.js",
     "initdb": "node database/initDb.js",
-    "lab": "node database/lab.js"
+    "lab": "node lab/lab.js"
   },
   "author": "Frankie Chow",
   "license": "GPL-3.0-or-later",
