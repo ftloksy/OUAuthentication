@@ -1,55 +1,57 @@
 import mongoose from 'mongoose';
 
-const OrgUnitsSchema = new mongoose.Schema({
+const { Schema, model } = mongoose;
 
-  name: { 
-    type: String, 
-    enum: [
-      { "News management" : {
-         division: {
-           type: String,
-           enum: [
-             "Editorial",
-             "Content Strategy",
-             "Audience Development",
-             "Social Media",
-             "Marketing",
-             "Advertising",
-             "Finance",
-             "IT",
-             "Human Resource",
-             "Legal"
-           ],
-           required: true 
-         }
-      },
-    },
-    { "Software reviews" : {
-        division: {
-          type: String,
-          enum: [
-            "Product Management",
-            "Engineering",
-            "QA",
-            "Marketing",
-            "Sales",
-            "Finance",
-            "IT",
-            "Human Resource",
-            "Legal",
-            "Compliance"
-          ],
-          required: true
-        }
-      }
-    },
-      "Hardware reviews",
-      "Opinion publishing"
-      ], 
-    required: true },
+const orgUnitsSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  name: { type: String, require: true }
 });
 
-const OrgUnits = mongoose.model('OrgUnits', OrgUnitsSchema);
+const divisionsSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  name: { type: String, require: true },
+  credential: [ { type: Schema.Types.ObjectId, ref: "Employees" } ]
+});
 
-export default OrgUnits;
+const orgUnitsDivisionsSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  orgunits: { type: Schema.Types.ObjectId, ref: "OrgUnits" },
+  divisions: { type: Schema.Types.ObjectId, ref: "Divisions" }
+});
+
+const userRolesSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  role: {
+    type: String,
+    enum: ["Normal", "Management", "Admin"],
+    required: true
+  },
+  read: Boolean,
+  addnew: Boolean,
+  update: Boolean,
+  assing: Boolean,
+  unassing: Boolean
+});
+
+const employeesSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  userrole: { type: Schema.Types.ObjectId, ref: "UserRoles" },
+  oudiv: [{ type: Schema.Types.ObjectId, ref: "OrgUnitsDivisions" }],
+  loginname: { type: String, required: true },
+  password: { type: String, required: true }
+});
+
+const OrgUnits = model('OrgUnits', orgUnitsSchema);
+
+const Divisions = model('Divisions', divisionsSchema);
+
+const UserRoles = model('UserRoles', userRolesSchema);
+
+const Employees = model('Employees', employeesSchema);
+
+const OrgUnitsDivisions = model('OrgUnitsDivisions', 
+          orgUnitsDivisionsSchema);
+
+export { OrgUnits, OrgUnitsDivisions, 
+          Divisions, UserRoles, Employees };
 
