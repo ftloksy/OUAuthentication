@@ -1,13 +1,9 @@
-/**
- * this is the test_suit for this package.
- */
 import DbHandler from '../database/DbHandler.js';
-
-import userPasswordTest from './userPasswordTest.js';
+import insertOne from './insertOne.js';
 
 const dbHandler = new DbHandler();
 
-userPasswordTest();
+insertOne();
 
 after(() => {
   dbHandler.closeDbConnection();

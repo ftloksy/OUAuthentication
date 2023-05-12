@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import ouAuthRoutes from './routes/ouAuthRoutes.js';
 
 const app = express();
 
@@ -10,9 +11,7 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
-app.get('/resource', (req, res) => {
-  res.json({msg: 'Welcome!!'});
-});
+app.use('/login', ouAuthRoutes);
 
 export default app.listen(PORT, function (err) {
     if (err) console.log(err);
