@@ -37,8 +37,13 @@ const employeesSchema = new Schema({
   _id: Schema.Types.ObjectId,
   userrole: { type: Schema.Types.ObjectId, ref: "UserRoles" },
   oudiv: [{ type: Schema.Types.ObjectId, ref: "OrgUnitsDivisions" }],
-  loginname: { type: String, required: true },
-  password: { type: String, required: true }
+  loginname: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  email: String,
+  telephone: String,
+  address: String,
+  firstname: String,
+  lastname: String
 });
 
 const OrgUnits = model('OrgUnits', orgUnitsSchema);

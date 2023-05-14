@@ -10,7 +10,7 @@ import app from '../app.js';
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-const userPasswordTest = () => {
+const userLoginNameTest = () => {
   describe('POST login and password', () => {
   
     it('Pass Login Name and Password to express.', (done) => {
@@ -29,14 +29,10 @@ const userPasswordTest = () => {
         console.log(taken);
 
         chai.request(app)
-        .get('/login/checkpwd')
+        .get('/login/finduser')
         .set('Authorization', ': Bearer ' + taken)
-//        .set('Authorization', ': Bearer ddabdade')
-
         .end((err, res) => {
           console.log(res.body);
-          console.log("Taken 2: ");
-          console.log(taken);
         });
 
         done();
@@ -46,4 +42,4 @@ const userPasswordTest = () => {
   });
 }
 
-export default userPasswordTest;
+export default userLoginNameTest;
