@@ -10,7 +10,10 @@ import app from '../app.js';
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-const userLoginName = () => {
+const userRegTest = () => {
+  
+  let token = null
+
   describe('POST login and password', () => {
   
     it('Pass Login Name and Password to express.', (done) => {
@@ -24,31 +27,33 @@ const userLoginName = () => {
       )
       .end((err, res) => {
         console.log(res.body);
-        const taken = res.body.taken;
-        console.log("Taken 1: ");
-        console.log(taken);
-
-        chai.request(app)
-        .post('/login/reguser')
-        .set('Authorization', ': Bearer ' + taken)
-        .send(
-          {
-            email: "freakchow@gmail.com",
-            telephone: "(852)23402125",
-            address: "21 Wavetree Road, Liverpool",
-            firstname: "Frankie",
-            lastname: "Chow"
-          }
-        )
-        .end((err, res) => {
-          console.log(res.body);
-        });
-
+        token = res.body.token;
         done();
-
       })
+    })
+  })
+
+   // How to access token var ??
+   describe('Modify user Reg', () => {
+    it('Use the token in Reg user test unit', (done) => {
+      chai.request(app)
+      .post('/login/reguser')
+      .set('Authorization', ': Bearer ' + token)
+      .send(
+        {
+          email: "freakchow@gmail.com",
+          telephone: "(852)23402125",
+          address: "21 Wavetree Road, Liverpool",
+          firstname: "Frankie",
+          lastname: "Chow"
+        }
+      )
+      .end((err, res) => {
+        console.log(res.body);
+        done();
+      });
     });
   });
 }
 
-export default userLoginName;
+export default userRegTest;

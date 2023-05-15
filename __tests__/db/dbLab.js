@@ -1,5 +1,5 @@
-import { Employees,  OrgUnitsDivisions } from '../models/OrgUnits.js';
-import DbConnect from '../database/DbConnect.js';
+import { Employees,  OrgUnitsDivisions } from '../../models/OrgUnits.js';
+import DbConnect from '../../database/DbConnect.js';
 
 const dbConnect = new DbConnect();
 

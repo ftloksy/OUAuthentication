@@ -1,20 +1,27 @@
 /**
  * this is the test_suit for this package.
  */
-import DbHandler from '../database/DbHandler.js';
+import DbConnect from '../database/DbConnect.js';
 
-import userPasswordTest from './userPasswordTest.js';
+
 import loginTest from './loginTest.js';
+import userPasswordTest from './userPasswordTest.js';
 import userLoginNameTest from './userLoginNameTest.js';
 import userRegTest from './userRegTest.js';
 
-const dbHandler = new DbHandler();
+import hasRightTest from './hasRightTest.js';
+
+const dbConnect = new DbConnect();
+
 
 userPasswordTest();
-loginTest();
 userLoginNameTest();
-//userRegTest();
+userRegTest();
+
+loginTest();
+hasRightTest();
+
 
 after(() => {
-  dbHandler.closeDbConnection();
+  dbConnect.closeDbConnection();
 });

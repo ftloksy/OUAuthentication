@@ -8,7 +8,7 @@
     "test": "mocha __tests__/app.test.js",
     "start": "nodemon app.js",
     "initdb": "node database/initDb.js",
-    "lab": "node lab/lab.js"
+    "lab": "mocha __tests__/db/dbLab.js"
   },
   "author": "Frankie Chow",
   "license": "GPL-3.0-or-later",

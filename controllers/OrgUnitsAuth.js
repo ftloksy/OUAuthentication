@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
-import { Employees } from '../models/OrgUnits.js';
+import { Employees, OrgUnitsDivisions } from '../models/OrgUnits.js';
 
 class  OrgUnitsAuth {
   constructor(dbCount) {
@@ -39,7 +39,7 @@ class  OrgUnitsAuth {
           );
           res.json({
             msg: "Login Success!",
-            taken: loginToken
+            token: loginToken
            });        
         } else {
           res.json({msg: "Invalid username or password"});
@@ -48,7 +48,7 @@ class  OrgUnitsAuth {
     }
   }
 
-  chkPwd(){
+  chkToken(){
     return (req, res, next) => {
       const token = req.header('Authorization').split(' ')[2]
       console.log("Express Token: ");
@@ -66,7 +66,7 @@ class  OrgUnitsAuth {
 
   helloWorld() {
     return (req, res) => {
-      res.json({msg: "Hello !"});
+      res.json({msg: "Hello !" + req.params.uid });
     }
   }
 
@@ -77,21 +77,41 @@ class  OrgUnitsAuth {
       .then((emp, err) => {
         req.err = err;
         req.emp = emp;
-
-        //if (err) {
-        //  res.status(401).json({err});
-        //} else {
-        //  res.json(emp);
-        //}
-
         next();
       })
     }
   }
 
-  regUser() {
-    return (req, res) => {
+  // This need to follow development.
+  hasRight(action) {
+    return (req, res, next) => {
       const userObj = req.decoded;
+      console.log("ID in Has Right. :");
+      console.log(userObj.id);
+      console.log("Request in ID :");
+      console.log(req.params.uid );
+      Employees.findById(userObj.id)
+      .populate('userrole')
+      .then((emp, err) => {
+        console.log("Has Right HERE.");
+        console.log(emp);
+        req.err = err;
+        res.emp = emp;
+        if (action === 'hello') {
+          next();
+        } else {
+          res.status(405)
+          .json({righterror: "You haven't enought right to do this"});
+        }
+      });
+    }
+  }
+
+  regUser() {
+    return (req, res, next) => {
+      const userObj = req.decoded;
+      console.log("User id in regUser: ");
+      console.log(userObj.id);
       Employees.findByIdAndUpdate(userObj.id, req.body)
       .then((emp, err) => {
         req.err = err;
@@ -106,6 +126,19 @@ class  OrgUnitsAuth {
       const returnObj = req.err ? {obj: {err: req.err}, status: 400} 
           : {obj: req.emp, status: 200};
       res.status(returnObj.status).json(returnObj.obj);
+    }
+  }
+
+  getOrgDiv() {
+    return (req, res, next) => {
+      OrgUnitsDivisions.find()
+      .populate('orgunits')
+      .populate('divisions')
+      .then((oudiv, err) => {
+        req.err = err;
+        req.emp = emp;
+        next();
+      };
     }
   }
 

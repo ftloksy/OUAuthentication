@@ -10,12 +10,11 @@ import app from '../app.js';
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-const loginTest = () => {
+const hasRightTest = () => {
 
   let token = null;
 
   describe('POST login and password', () => {
-  
     it('Pass Login Name and Password to express.', (done) => {
       chai.request(app)
       .post('/login/auth')
@@ -30,21 +29,20 @@ const loginTest = () => {
         token = res.body.token;
         done();
       })
-    });
-  });
-      // How to access token var ??
-   describe('Other test units', () => {
-    it('Use the token in another test unit', (done) => {
+    })
+  })
+
+  describe('POST login and password', () => {
+    it('Pass Login Name and Password to express.', (done) => {
       chai.request(app)
-      .get('/login/checkpwd/tyyrdddfeeff')
-      .set('Authorization', ': Bearer ' + token) 
+      .get('/login/hasright/645e5442e38de844831d3d9b')
+      .set('Authorization', ': Bearer ' + token)
       .end((err, res) => {
-        expect(res).to.have.status(200);
         console.log(res.body);
         done();
       });
-    });
+    })
   });
 }
 
-export default loginTest;
+export default hasRightTest;

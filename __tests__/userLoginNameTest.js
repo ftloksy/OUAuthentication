@@ -11,6 +11,9 @@ chai.use(chaiHttp);
 const expect = chai.expect;
 
 const userLoginNameTest = () => {
+
+  let token = null;
+
   describe('POST login and password', () => {
   
     it('Pass Login Name and Password to express.', (done) => {
@@ -24,19 +27,20 @@ const userLoginNameTest = () => {
       )
       .end((err, res) => {
         console.log(res.body);
-        const taken = res.body.taken;
-        console.log("Taken 1: ");
-        console.log(taken);
-
-        chai.request(app)
-        .get('/login/finduser')
-        .set('Authorization', ': Bearer ' + taken)
-        .end((err, res) => {
-          console.log(res.body);
-        });
-
+        token = res.body.token;
         done();
+      });
+    })
+  })
 
+  describe('Find user test', () => {
+    it('Use the token to find user test', (done) => {
+      chai.request(app)
+      .get('/login/finduser/645e5442e38de844831d3d9b')
+      .set('Authorization', ': Bearer ' + token)
+      .end((err, res) => {
+//         console.log(res.body);
+        done();
       })
     });
   });
