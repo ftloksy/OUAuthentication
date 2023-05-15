@@ -8,6 +8,9 @@
     "test": "mocha __tests__/app.test.js",
     "start": "nodemon app.js",
     "initdb": "node database/initDb.js",
+    "initoddb": "node database/initOuDiv.js",
+    "initurdb": "node database/initUserRoles.js",
+    "initadmin": "node database/initAdmin.js",
     "lab": "mocha __tests__/db/dbLab.js"
   },
   "author": "Frankie Chow",

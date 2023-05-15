@@ -21,5 +21,9 @@ router.post('/reguser/:uid', ouAuth.chkToken(), ouAuth.regUser(), ouAuth.sendObj
 
 router.get('/hasright/:uid', ouAuth.chkToken(), ouAuth.hasRight('hello'), ouAuth.sendObj());
 
+router.get('/getdiv/:ouid', ouAuth.getDiv(), ouAuth.sendObj());
+
+router.get('/getou', ouAuth.getOrgUnits(), ouAuth.sendObj());
+
 export default router;
 

@@ -1,4 +1,6 @@
-import { Employees,  OrgUnitsDivisions } from '../../models/OrgUnits.js';
+import { Employees,  
+  OrgUnitsDivisions, Divisions } from '../../models/OrgUnits.js';
+
 import DbConnect from '../../database/DbConnect.js';
 
 const dbConnect = new DbConnect();
@@ -24,6 +26,13 @@ describe('DbTest', () => {
       console.log(oudiv);
       console.log(err);
     });
+
+    Divisions.find()
+    .then((div, err) => {
+      console.log("Found Div: ");
+      console.log(div);
+      console.log(err);
+     })
 
     done();
   })

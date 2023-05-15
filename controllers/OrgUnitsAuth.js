@@ -1,7 +1,10 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
-import { Employees, OrgUnitsDivisions } from '../models/OrgUnits.js';
+import { Employees, 
+  OrgUnitsDivisions, 
+  Divisions,
+  OrgUnits } from '../models/OrgUnits.js';
 
 class  OrgUnitsAuth {
   constructor(dbCount) {
@@ -76,7 +79,7 @@ class  OrgUnitsAuth {
       Employees.findById(userObj.id)
       .then((emp, err) => {
         req.err = err;
-        req.emp = emp;
+        req.foundObj = emp;
         next();
       })
     }
@@ -96,7 +99,7 @@ class  OrgUnitsAuth {
         console.log("Has Right HERE.");
         console.log(emp);
         req.err = err;
-        res.emp = emp;
+        res.foundObj = emp;
         if (action === 'hello') {
           next();
         } else {
@@ -115,7 +118,7 @@ class  OrgUnitsAuth {
       Employees.findByIdAndUpdate(userObj.id, req.body)
       .then((emp, err) => {
         req.err = err;
-        req.emp = emp;
+        req.foundObj = emp;
         next();
       })
     }
@@ -124,7 +127,7 @@ class  OrgUnitsAuth {
   sendObj() {
     return (req, res) => {
       const returnObj = req.err ? {obj: {err: req.err}, status: 400} 
-          : {obj: req.emp, status: 200};
+          : {obj: req.foundObj, status: 200};
       res.status(returnObj.status).json(returnObj.obj);
     }
   }
@@ -136,9 +139,35 @@ class  OrgUnitsAuth {
       .populate('divisions')
       .then((oudiv, err) => {
         req.err = err;
-        req.emp = emp;
+        req.foundObj = emp;
         next();
-      };
+      });
+    }
+  }
+
+  getDiv() {
+    return (req, res, next) => {
+      Divisions.find()
+      .then((div, err) => {
+        req.foundObj = div;
+        console.log("Found Div: ");
+        console.log(req.foundObj);
+        req.err = err;
+        next();
+      });
+    }
+  }
+
+  getOrgUnits() {
+    return (req, res, next) => {
+      OrgUnits.find()
+      .then((div, err) => {
+        req.foundObj = div;
+        console.log("Found Div: ");
+        console.log(req.foundObj);
+        req.err = err;
+        next();
+      });
     }
   }
 
