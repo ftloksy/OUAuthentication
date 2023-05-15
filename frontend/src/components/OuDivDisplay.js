@@ -4,7 +4,8 @@ class OuDivDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ouObjs: []
+      orgUnitsPool: [],
+      divisionsPool: []
     };
     this.handleInputSubmit = this.handleInputSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -21,12 +22,12 @@ class OuDivDisplay extends Component {
         throw Error(response.statusText);
       }
       response.json().then(OrgUnits => {
-        let ouObjs = [{_id: "", name: ""}];
+        let orgUnitsPool = [{_id: "", name: ""}];
         OrgUnits.forEach( ou => {
-          ouObjs.push(ou);
+          orgUnitsPool.push(ou);
         })
-        this.setState( { ouObjs } );
-        console.log(OrgUnits);
+        this.setState( { orgUnitsPool } );
+        console.log( orgUnitsPool );
       })
     })
   }
@@ -39,17 +40,33 @@ class OuDivDisplay extends Component {
   handleInputChange(event) {
     event.preventDefault();
     const { name, id, value } = event.target;
+    if ( name === "ou" ) {
+      fetch('/login/getdiv/' + value)
+      .then(response => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        response.json().then(divisions => {
+          let divisionsPool = [];
+          divisions.forEach((OuDiv) => {
+            divisionsPool.push(OuDiv.divisions);
+          })
+          this.setState({divisionsPool});
+          console.log(divisionsPool);
+        })
+      })
+    }
     alert(" name: " + name + " value: " + value );
   }
 
   render() {
-      const { ouObjs } = this.state ;
+      const { orgUnitsPool } = this.state ;
       return (
         <form onSubmit={this.handleInputSubmit}>
           <label for="ou">Choose a Org Units</label>
           <select name="ou" 
             id="orgunits" onChange={this.handleInputChange}>
-            {ouObjs.map(OrgUnits => (
+            {orgUnitsPool.map(OrgUnits => (
               <option value={OrgUnits._id}>{OrgUnits.name}</option>
             ))}
           </select>

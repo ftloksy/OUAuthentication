@@ -134,12 +134,14 @@ class  OrgUnitsAuth {
 
   getOrgDiv() {
     return (req, res, next) => {
-      OrgUnitsDivisions.find()
+      OrgUnitsDivisions.find({ orgunits : req.params.ouid})
       .populate('orgunits')
       .populate('divisions')
       .then((oudiv, err) => {
+        console.log("OUID in getOrgDiv: ");
+        console.log(oudiv);
         req.err = err;
-        req.foundObj = emp;
+        req.foundObj = oudiv;
         next();
       });
     }
