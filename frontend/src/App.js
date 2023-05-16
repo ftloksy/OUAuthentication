@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import OuDivDisplay from './components/OuDivDisplay';
+import CreateEmployee from './components/CreateEmployee';
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
         >
           Learn React
         </a>
-        <OuDivDisplay/>
+        <CreateEmployee />
       </header>
     </div>
   );
