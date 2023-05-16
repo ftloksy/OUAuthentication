@@ -147,7 +147,7 @@ class  OrgUnitsAuth {
     }
   }
 
-  getDiv() {
+  getDivs() {
     return (req, res, next) => {
       Divisions.find()
       .then((div, err) => {
@@ -183,6 +183,17 @@ class  OrgUnitsAuth {
           orgunitsname: oudiv.orgunits.name,
           divisionsname: oudiv.divisions.name
         }
+        req.err = err;
+        next();
+      });
+    }
+  }
+
+  getDivById() {
+    return (req, res, next) => {
+      Divisions.findById(req.params.divid)
+      .then((dv, err) => {
+        req.foundObj = dv;
         req.err = err;
         next();
       });

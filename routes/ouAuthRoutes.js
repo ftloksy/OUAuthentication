@@ -25,9 +25,11 @@ router.get('/getoudiv/:ouid', ouAuth.getOrgUnitDiv(), ouAuth.sendObj());
 
 router.get('/getou', ouAuth.getOrgUnits(), ouAuth.sendObj());
 
-router.get('/getdiv', ouAuth.getDiv(), ouAuth.sendObj());
+router.get('/getdiv', ouAuth.getDivs(), ouAuth.sendObj());
 
 router.get('/getoudivnamebyid/:oudivid', ouAuth.getOrgUnitsDivById(), ouAuth.sendObj());
+
+router.get('/getdivnamebyid/:divid', ouAuth.getDivById(), ouAuth.sendObj());
 
 export default router;
 

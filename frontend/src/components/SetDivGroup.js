@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import DivSelecter from './DivSelecter';
-//import DivName from './OuDivName';
+import DivName from './DivName';
 
 class SetDivGroup extends Component {
   constructor(props) {
@@ -52,7 +52,7 @@ class SetDivGroup extends Component {
           <DivSelecter onSubmit={(selectDiv) => this.getDivisions(selectDiv)}/>
           {divChoice.map(dv => (
             <div>
-            <span>{dv}</span><button onClick={(event) => this.deleteCurrectDiv(event, dv)}>Del</button>
+            <DivName divid={dv}/><button onClick={(event) => this.deleteCurrectDiv(event, dv)}>Del</button>
             </div>
           ))}
           <button onClick={this.setDivGroup}>Confirm</button>

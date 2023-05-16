@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SetOuDivGroup from './SetOuDivGroup';
 import SetDivGroup from './SetDivGroup';
 import OuDivName from './OuDivName';
+import DivName from './DivName';
 
 class CreateEmployee extends Component {
   constructor(props) {
@@ -72,7 +73,7 @@ class CreateEmployee extends Component {
               : <> 
               {divsGroup.map(dv => (
                 <div>
-                  {dv}
+                  <DivName divid={dv} />
                 </div>
               ))}
               <br/>

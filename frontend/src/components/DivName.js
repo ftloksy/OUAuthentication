@@ -4,7 +4,6 @@ class OuDivName extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        ouName: "",
         divName: ""
      };
   };
@@ -14,25 +13,24 @@ class OuDivName extends Component {
   }
 
   async fetchNames() {
-    fetch('/login/getoudivnamebyid/' + this.props.oudivid)
+    fetch('/login/getdivnamebyid/' + this.props.divid)
     .then(response => {
       if (!response.ok){
         throw Error(response.statusText);
       }
-      response.json().then(names => {
+      response.json().then(dv => {
         this.setState( { 
-            ouName: names.orgunitsname,
-            divName: names.divisionsname
+            divName: dv.name
           } );
-        console.log( names );
+        console.log( dv.name );
       })
     })
   }
 
   render() {
-      const { ouName, divName } = this.state ;
+      const { divName } = this.state ;
       return (
-        <span>Org Unit: {ouName}, Division: {divName}</span>
+        <span>Division: {divName}</span>
       );
   }
 }
