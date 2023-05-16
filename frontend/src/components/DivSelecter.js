@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 
-class OuDivDisplay extends Component {
+class DivSelecter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      orgUnitsPool: [],
       divisionsPool: [],
-      choiceOuDiv: ''
+      choiceDiv: ''
     };
     this.handleInputSubmit = this.handleInputSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -35,41 +34,18 @@ class OuDivDisplay extends Component {
 
   handleInputSubmit(event) {
     event.preventDefault();
-    //const { name, id, value } = event.target;
-    //this.setState( { })
-    //console.log(event);
-    alert("Click Submit!");
-    this.props.onSubmit(this.state.choiceOuDiv);
+    this.props.onSubmit(this.state.choiceDiv);
   }
 
   handleInputChange(event) {
     event.preventDefault();
     const { name, id, value } = event.target;
-    if ( name === "ou" && value ) {
-
-      fetch('/login/getdiv/' + value)
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        response.json().then(divisions => {
-          let divisionsPool = [];
-          divisions.forEach((ouDiv) => {
-            divisionsPool.push( { id: ouDiv._id, div: ouDiv.divisions } );
-          })
-          this.setState({divisionsPool});
-          console.log(divisionsPool);
-        })
-      })
-    } else if ( name === "ou" && !value ) {
-      this.setState({
-        divisionsPool: [],
-        choiceOuDiv: ""
-      })
-    }
-    alert(" name: " + name + " value: " + value );
-    if (name === "dv") {
-      this.setState({choiceOuDiv: value})
+    if ( name === "dv" && value ) {
+      let tmpDivChoice = this.state.choiceDiv;
+      if (tmpDivChoice.indexOf(value) !== -1 ){
+        tmpDivChoice.push(value);
+        this.setState({choiceDiv: tmpDivChoice});
+      }
     }
   }
 
@@ -77,13 +53,6 @@ class OuDivDisplay extends Component {
       const { orgUnitsPool, divisionsPool} = this.state ;
       return (
         <form onSubmit={this.handleInputSubmit}>
-          <label for="ou">Choose a Org Units</label>
-          <select name="ou" 
-            id="orgunits" onChange={this.handleInputChange}>
-            {orgUnitsPool.map(orgUnits => (
-              <option value={orgUnits._id}>{orgUnits.name}</option>
-            ))}
-          </select><br/>
           <label for="dv">Choose a Divisions</label>
           <select name="dv"
             id="division" onChange={this.handleInputChange}>
@@ -97,4 +66,4 @@ class OuDivDisplay extends Component {
   }
 }
 
-export default OuDivDisplay;
+export default DivSelecter;

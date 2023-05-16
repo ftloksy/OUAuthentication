@@ -12,9 +12,10 @@ import getOuTest from './getOuTest.js';
 import hasRightTest from './hasRightTest.js';
 
 import getDivFromOUTest from './getDivFromOUTest.js';
+import getOuDivNameByIdTest from './getOuDivNameByIdTest.js'
+import getDivTest from './getDivTest.js'
 
 const dbConnect = new DbConnect();
-
 
 userPasswordTest();
 userLoginNameTest();
@@ -25,6 +26,9 @@ hasRightTest();
 getOuTest();
 
 getDivFromOUTest();
+getOuDivNameByIdTest();
+
+getDivTest();
 
 after(() => {
   dbConnect.closeDbConnection();

@@ -21,9 +21,13 @@ router.post('/reguser/:uid', ouAuth.chkToken(), ouAuth.regUser(), ouAuth.sendObj
 
 router.get('/hasright/:uid', ouAuth.chkToken(), ouAuth.hasRight('hello'), ouAuth.sendObj());
 
-router.get('/getdiv/:ouid', ouAuth.getOrgDiv(), ouAuth.sendObj());
+router.get('/getoudiv/:ouid', ouAuth.getOrgUnitDiv(), ouAuth.sendObj());
 
 router.get('/getou', ouAuth.getOrgUnits(), ouAuth.sendObj());
+
+router.get('/getdiv', ouAuth.getDiv(), ouAuth.sendObj());
+
+router.get('/getoudivnamebyid/:oudivid', ouAuth.getOrgUnitsDivById(), ouAuth.sendObj());
 
 export default router;
 

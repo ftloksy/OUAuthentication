@@ -132,7 +132,7 @@ class  OrgUnitsAuth {
     }
   }
 
-  getOrgDiv() {
+  getOrgUnitDiv() {
     return (req, res, next) => {
       OrgUnitsDivisions.find({ orgunits : req.params.ouid})
       .populate('orgunits')
@@ -167,6 +167,22 @@ class  OrgUnitsAuth {
         req.foundObj = div;
         console.log("Found Div: ");
         console.log(req.foundObj);
+        req.err = err;
+        next();
+      });
+    }
+  }
+
+  getOrgUnitsDivById() {
+    return (req, res, next) => {
+      OrgUnitsDivisions.findById(req.params.oudivid)
+      .populate('orgunits')
+      .populate('divisions')
+      .then((oudiv, err) => {
+        req.foundObj = { 
+          orgunitsname: oudiv.orgunits.name,
+          divisionsname: oudiv.divisions.name
+        }
         req.err = err;
         next();
       });

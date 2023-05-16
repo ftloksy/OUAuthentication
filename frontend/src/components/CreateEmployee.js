@@ -1,53 +1,47 @@
 import React, { Component } from 'react';
-import OuDivDisplay from './OuDivDisplay';
+import SetOuDivGroup from './SetOuDivGroup';
+import OuDivName from './OuDivName';
 
 class CreateEmployee extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      orgUnitsDivChoice: []
+      orgUnitDivsGroup: [],
+      orgUnitDivsSelect: false
     };
-    this.getOrgUnitsDivisions = this.getOrgUnitsDivisions.bind(this);
-    this.deleteCurrectOuDiv = this.deleteCurrectOuDiv.bind(this);
+    this.ouDivGroup = this.ouDivGroup.bind(this);
+    this.setOuDivsSelect = this.setOuDivsSelect.bind(this);
   };
 
-  componentDidMount() {
-    this.setState({orgUnitsDivChoice: []});
+  ouDivGroup(oudivGroup) {
+    this.setState({ orgUnitDivsGroup: oudivGroup });
+    this.setOuDivsSelect();
   }
 
-
-  getOrgUnitsDivisions(oudiv) {
-    alert("Click Submit! Report by Parent." + oudiv );
-    let tmpOrgUnitsDivChoice = this.state.orgUnitsDivChoice ;
-    if ( tmpOrgUnitsDivChoice.indexOf(oudiv) === -1 ) {
-      tmpOrgUnitsDivChoice.push(oudiv);
-    }
-    this.setState({orgUnitsDivChoice: tmpOrgUnitsDivChoice});
-
-  }
-
-  deleteCurrectOuDiv(event, oudiv){
-    event.preventDefault();
-    //console.log("Delete Currect Ou Div: ");
-    //console.log(oudiv);
-    let tmpOrgUnitsDivChoice = this.state.orgUnitsDivChoice;
-    let oudivIndex = tmpOrgUnitsDivChoice.indexOf(oudiv);
-    if (oudivIndex != -1) {
-      tmpOrgUnitsDivChoice.splice(oudivIndex, 1);
-    }
-    this.setState({orgUnitsDivChoice: tmpOrgUnitsDivChoice})
+  setOuDivsSelect() {
+    const select = this.state.orgUnitDivsSelect ;
+    this.setState({orgUnitDivsSelect: !select})
   }
 
   render() {
-      const orgUnitsDivChoice  = this.state.orgUnitsDivChoice ;
+      const { orgUnitDivsGroup, orgUnitDivsSelect }  = this.state ;
       return (
-          <div id="setoudiv">
-          {orgUnitsDivChoice.map(oudiv => (
-            <div>
-            <span>{oudiv}</span><button onClick={(event) => this.deleteCurrectOuDiv(event, oudiv)}>Del</button>
-            </div>
-          ))}
-          <OuDivDisplay onSubmit={(oudiv) => this.getOrgUnitsDivisions(oudiv)}/>
+          <div id="showoudivgroup">
+            {orgUnitDivsSelect
+              ? <SetOuDivGroup 
+                  onSetDivGroup={(oudivGroup) => this.ouDivGroup(oudivGroup)}
+                  selectedoudiv={orgUnitDivsGroup}
+                />
+              : <> 
+              {orgUnitDivsGroup.map(oudiv => (
+                <div>
+                  <OuDivName oudivid={oudiv}/>
+                </div>
+              ))}
+              <br/>
+              <button onClick={this.setOuDivsSelect}>Update</button>
+            </>
+            }
           </div>
       );
   }

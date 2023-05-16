@@ -3,20 +3,18 @@
  */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import md5 from '../helper/MD5.js';
 
 import app from '../app.js';
 
 chai.use(chaiHttp);
-const expect = chai.expect;
 
-const getDivFromOUTest = () => {
+const getOuDivNameByIdTest = () => {
 
-  describe('Get Divisions Names.', () => {
+  describe('Get OrgUnits and Divisions Names.', () => {
   
-    it('Get Divisions Names.', (done) => {
+    it('Get OrgUnits Divisions Names by Id.', (done) => {
       chai.request(app)
-      .get('/login/getoudiv/646251e7b3d4690051f434fa')
+      .get('/login/getoudivnamebyid/646251e7b3d4690051f43553')
       .end((err, res) => {
         console.log("Get Div Name from OU id.");
         console.log(res.body);
@@ -26,4 +24,4 @@ const getDivFromOUTest = () => {
   });
 }
 
-export default getDivFromOUTest;
+export default getOuDivNameByIdTest;
