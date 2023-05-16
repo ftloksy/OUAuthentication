@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SetOuDivGroup from './SetOuDivGroup';
+import SetDivGroup from './SetDivGroup';
 import OuDivName from './OuDivName';
 
 class CreateEmployee extends Component {
@@ -7,10 +8,15 @@ class CreateEmployee extends Component {
     super(props);
     this.state = {
       orgUnitDivsGroup: [],
-      orgUnitDivsSelect: false
+      orgUnitDivsSelect: false,
+      divsGroup: [],
+      divsSelect: false
     };
     this.ouDivGroup = this.ouDivGroup.bind(this);
     this.setOuDivsSelect = this.setOuDivsSelect.bind(this);
+
+    this.divGroup = this.divGroup.bind(this);
+    this.setDivsSelect = this.setDivsSelect.bind(this);
   };
 
   ouDivGroup(oudivGroup) {
@@ -18,14 +24,27 @@ class CreateEmployee extends Component {
     this.setOuDivsSelect();
   }
 
+  divGroup(dGroup) {
+    this.setState({ divsGroup: dGroup })
+    this.setDivsSelect();
+  }
+
   setOuDivsSelect() {
     const select = this.state.orgUnitDivsSelect ;
     this.setState({orgUnitDivsSelect: !select})
   }
 
+  setDivsSelect() {
+    const select = this.state.divsSelect ;
+    this.setState({divsSelect: !select})
+  }
+
   render() {
-      const { orgUnitDivsGroup, orgUnitDivsSelect }  = this.state ;
+      const { orgUnitDivsGroup, orgUnitDivsSelect, 
+        divsGroup, divsSelect }  = this.state ;
+
       return (
+        <>
           <div id="showoudivgroup">
             {orgUnitDivsSelect
               ? <SetOuDivGroup 
@@ -43,6 +62,25 @@ class CreateEmployee extends Component {
             </>
             }
           </div>
+
+          <div id="showdivgroup">
+            {divsSelect
+              ? <SetDivGroup 
+                  onSetDivGroup={(dGroup) => this.divGroup(dGroup)}
+                  selectedoudiv={divsGroup}
+                />
+              : <> 
+              {divsGroup.map(dv => (
+                <div>
+                  {dv}
+                </div>
+              ))}
+              <br/>
+              <button onClick={this.setDivsSelect}>Update</button>
+            </>
+            }
+          </div>
+        </>
       );
   }
 }

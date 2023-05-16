@@ -16,18 +16,18 @@ class DivSelecter extends Component {
   }
 
   async fetchDiv() {
-    fetch('/login/getou')
+    fetch('/login/getdiv')
     .then(response => {
       if (!response.ok){
         throw Error(response.statusText);
       }
-      response.json().then(OrgUnits => {
-        let orgUnitsPool = [{_id: "", name: ""}];
-        OrgUnits.forEach( ou => {
-          orgUnitsPool.push(ou);
+      response.json().then( divs => {
+        let divisionsPool = [{_id: "", name: ""}];
+        divs.forEach( dv => {
+          divisionsPool.push(dv);
         })
-        this.setState( { orgUnitsPool } );
-        console.log( orgUnitsPool );
+        this.setState( { divisionsPool: divisionsPool } );
+        console.log( divisionsPool );
       })
     })
   }
@@ -35,29 +35,26 @@ class DivSelecter extends Component {
   handleInputSubmit(event) {
     event.preventDefault();
     this.props.onSubmit(this.state.choiceDiv);
+    console.log(this.state.choiceDiv);
   }
 
   handleInputChange(event) {
     event.preventDefault();
     const { name, id, value } = event.target;
     if ( name === "dv" && value ) {
-      let tmpDivChoice = this.state.choiceDiv;
-      if (tmpDivChoice.indexOf(value) !== -1 ){
-        tmpDivChoice.push(value);
-        this.setState({choiceDiv: tmpDivChoice});
-      }
+      this.setState({choiceDiv: value});
     }
   }
 
   render() {
-      const { orgUnitsPool, divisionsPool} = this.state ;
+      const { divisionsPool } = this.state ;
       return (
         <form onSubmit={this.handleInputSubmit}>
           <label for="dv">Choose a Divisions</label>
           <select name="dv"
             id="division" onChange={this.handleInputChange}>
             {divisionsPool.map(dv => (
-              <option value={dv.id}>{dv.div.name}</option>
+              <option value={dv._id}>{dv.name}</option>
             ))}
           </select>
           <input type="submit" value="Submit" />
