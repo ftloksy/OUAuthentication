@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import CreateEmployee from './components/CreateEmployee';
+import UserRoleSelecter from './components/UserRoleSelecter';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           Learn React
         </a>
         <CreateEmployee />
+        <UserRoleSelecter />
       </header>
     </div>
   );

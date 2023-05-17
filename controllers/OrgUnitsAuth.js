@@ -4,7 +4,8 @@ import jwt from 'jsonwebtoken';
 import { Employees, 
   OrgUnitsDivisions, 
   Divisions,
-  OrgUnits } from '../models/OrgUnits.js';
+  OrgUnits,
+  UserRoles } from '../models/OrgUnits.js';
 
 class  OrgUnitsAuth {
   constructor(dbCount) {
@@ -166,6 +167,19 @@ class  OrgUnitsAuth {
       .then((div, err) => {
         req.foundObj = div;
         console.log("Found Div: ");
+        console.log(req.foundObj);
+        req.err = err;
+        next();
+      });
+    }
+  }
+
+  getUserRoles() {
+    return (req, res, next) => {
+      UserRoles.find()
+      .then((ur, err) => {
+        req.foundObj = ur;
+        console.log("Found UserRole: ");
         console.log(req.foundObj);
         req.err = err;
         next();

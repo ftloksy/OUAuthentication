@@ -31,5 +31,7 @@ router.get('/getoudivnamebyid/:oudivid', ouAuth.getOrgUnitsDivById(), ouAuth.sen
 
 router.get('/getdivnamebyid/:divid', ouAuth.getDivById(), ouAuth.sendObj());
 
+router.get('/getuserroles', ouAuth.getUserRoles(), ouAuth.sendObj());
+
 export default router;
 
