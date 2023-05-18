@@ -36,7 +36,7 @@ const loginTest = () => {
    describe('Other test units', () => {
     it('Use the token in another test unit', (done) => {
       chai.request(app)
-      .get('/login/checkpwd/tyyrdddfeeff')
+      .get('/login/checktoken/tyyrdddfeeff')
       .set('Authorization', ': Bearer ' + token) 
       .end((err, res) => {
         expect(res).to.have.status(200);

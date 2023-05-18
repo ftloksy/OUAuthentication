@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import CreateEmployee from './components/CreateEmployee';
 import UserRoleSelecter from './components/UserRoleSelecter';
+import LocalStorageButton from './labcomponents/LocalStorageButton'
+import OuLogin from './components/OuLogin'
 
 function App() {
   return (
@@ -21,6 +23,11 @@ function App() {
         </a>
         <CreateEmployee />
         <UserRoleSelecter />
+
+        <LocalStorageButton />
+
+        <OuLogin />
+        
       </header>
     </div>
   );

@@ -13,7 +13,7 @@ router.post('/test', ouAuth.testLogin());
 
 router.post('/auth', ouAuth.loginAuth());
 
-router.get('/checkpwd/:uid', ouAuth.chkToken(), ouAuth.helloWorld());
+router.get('/checktoken', ouAuth.chkToken(), ouAuth.sendObj());
 
 router.get('/finduser/:uid', ouAuth.chkToken(), ouAuth.findUser(), ouAuth.sendObj());
 

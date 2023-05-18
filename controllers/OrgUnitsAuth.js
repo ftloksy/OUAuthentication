@@ -28,25 +28,40 @@ class  OrgUnitsAuth {
       const login = req.body.login;
       const passwd = req.body.password;
 
-      Employees.findOne({password: passwd})
+      const findEmployeesFilter = {
+        $or: [
+          { password: passwd },
+          { loginname: login }
+        ]
+      }
+
+      Employees.findOne(findEmployeesFilter)
       .then((userObj) => {
-        console.log("Login: ");
-        console.log(userObj);
-        console.log(userObj.loginname);
-        if (userObj.loginname === login) {
-          const loginToken = jwt.sign(
-            {
-              id: userObj._id
-            },
-            this.secretKey,
-            { expiresIn: '1h' }
-          );
-          res.json({
-            msg: "Login Success!",
-            token: loginToken
-           });        
+        if (userObj) {
+          console.log("Login: ");
+          console.log(userObj);
+          console.log(userObj.loginname);
+          if (userObj.loginname === login && userObj.password === passwd ) {
+            const loginToken = jwt.sign(
+              {
+                id: userObj._id,
+                firstname: userObj.firstname,
+                lastname: userObj.lastname
+              },
+              this.secretKey,
+              { expiresIn: '1h' }
+            );
+            res.json({
+              msg: "Login Success!",
+              token: loginToken,
+              firstname: userObj.firstname,
+              lastname: userObj.lastname
+            });        
+          } else {
+            res.status(401).json({msg: "Invalid username or password"});
+          }
         } else {
-          res.json({msg: "Invalid username or password"});
+          res.status(401).json({msg: "Invalid username or password"});
         } 
       })
     }
@@ -54,13 +69,18 @@ class  OrgUnitsAuth {
 
   chkToken(){
     return (req, res, next) => {
-      const token = req.header('Authorization').split(' ')[2]
+      const token = req.header('Authorization').split(' ')[1];
+      console.log("Auth Header: ", req.header('Authorization').split(' ')[1]);
       console.log("Express Token: ");
       console.log(token);
       try {
         const decoded = jwt.verify(token, this.secretKey)
         req.token = token;
         req.decoded = decoded;
+        req.foundObj = {
+          firstname: decoded.firstname,
+          lastname: decoded.lastname
+        }
         next();
       } catch ( err ) {
         res.status(401).json({err});

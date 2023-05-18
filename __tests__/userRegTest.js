@@ -37,7 +37,7 @@ const userRegTest = () => {
    describe('Modify user Reg', () => {
     it('Use the token in Reg user test unit', (done) => {
       chai.request(app)
-      .post('/login/reguser')
+      .post('/login/reguser/6462529079f4cc9d82d27e19')
       .set('Authorization', ': Bearer ' + token)
       .send(
         {
