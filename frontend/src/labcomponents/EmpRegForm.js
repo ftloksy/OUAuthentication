@@ -16,9 +16,6 @@ class EmpRegForm extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
     };
 
-    componentDidMount() {
-    }
-
     handleInputChange(event) {
         event.preventDefault();
         const { name, value } = event.target;
