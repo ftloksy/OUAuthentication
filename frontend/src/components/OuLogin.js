@@ -47,16 +47,10 @@ class OuLogin extends Component {
                     })
                 } else {
                     console.log('Error:', response.statusText);
-                    // this.setState({
-                    //     errorMessage: response.statusText
-                    // })
                 }
 
             } catch (err) {
                 console.log("Error : ", err.message);
-                // this.setState({
-                //     errorMessage: err.message
-                // })
             }
 
         } else {
@@ -149,7 +143,7 @@ class OuLogin extends Component {
                     <button onClick={this.logoutAndForgetToken}>Logout</button>
                 </>)
             : ( <form onSubmit={(event) => this.handleInputSubmit(event)}>
-                    <h1>Login Component</h1>
+                    <h2>Login</h2>
                     <label for="loginname">login: </label>
                     <input type="text"
                         id="loginname"

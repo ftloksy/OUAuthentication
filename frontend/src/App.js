@@ -1,10 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import CreateEmployee from './components/CreateEmployee';
-import UserRoleSelecter from './components/UserRoleSelecter';
 import LocalStorageButton from './labcomponents/LocalStorageButton'
 import OuLogin from './components/OuLogin'
-import EmpRegForm from './labcomponents/EmpRegForm';
 
 function App() {
   return (
@@ -22,14 +20,11 @@ function App() {
         >
           Learn React
         </a>
-        <CreateEmployee />
-        <UserRoleSelecter />
-
-        <LocalStorageButton />
-
         <OuLogin />
 
-        <EmpRegForm />
+        <CreateEmployee />
+
+        <LocalStorageButton />
         
       </header>
     </div>

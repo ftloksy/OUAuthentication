@@ -12,19 +12,14 @@ class EmpRegForm extends Component {
             firstname: "",
             lastname: ""           
         };
-        this.handleInputSubmit = this.handleInputSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
     };
 
-    handleInputChange(event) {
+    async handleInputChange(event) {
         event.preventDefault();
         const { name, value } = event.target;
-        this.setState( { [name]: value } );
-    }
-
-    handleInputSubmit(event) {
-        event.preventDefault();
-        console.log(this.state);
+        await this.setState( { [name]: value } );
+        this.props.onSelect(this.state);
     }
 
     render() {
@@ -64,8 +59,8 @@ class EmpRegForm extends Component {
                 }]
 
         return (
-                <form onSubmit={(event) => this.handleInputSubmit(event)}>
-                    <h1>Employees Registration Form</h1>
+            <>
+                    <h2>Registration Employees Form: </h2>
 
                     {textFields.map(field => (
                         <>
@@ -77,9 +72,8 @@ class EmpRegForm extends Component {
                                 onChange={(event) => this.handleInputChange(event)}/><br/>
                         </>
                     ))}
+            </>
 
-                    <input type="submit" value="add Employees" />
-                </form>
         )
     }
   

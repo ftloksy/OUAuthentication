@@ -7,7 +7,6 @@ class UserRoleSelecter extends Component {
       userRolesPool: [],
       choiceUserRole: ''
     };
-    this.handleInputSubmit = this.handleInputSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   };
 
@@ -22,20 +21,16 @@ class UserRoleSelecter extends Component {
         throw Error(response.statusText);
       }
       response.json().then( userroles => {
-        let userRolesPool = [{_id: "", name: ""}];
-        userroles.forEach( ur => {
-          userRolesPool.push(ur);
+        this.setState( { userRolesPool: userroles } );
+        userroles.forEach((ur) => {
+          if (ur.role === "Normal") {
+            this.setState({ choiceUserRole: ur._id });
+            this.props.onSelect(ur._id);
+          }
         })
-        this.setState( { userRolesPool: userRolesPool } );
-        console.log( userRolesPool );
+        console.log( userroles );
       })
     })
-  }
-
-  handleInputSubmit(event) {
-    event.preventDefault();
-    this.props.onSubmit(this.state.choiceUserRole);
-    console.log(this.state.choiceUserRole);
   }
 
   handleInputChange(event) {
@@ -44,21 +39,21 @@ class UserRoleSelecter extends Component {
     if ( name === "ur" && value ) {
       this.setState({choiceUserRole: value});
     }
+    this.props.onSelect(value);
   }
 
   render() {
       const { userRolesPool } = this.state ;
       return (
-        <form onSubmit={this.handleInputSubmit}>
-          <label for="ur">Choose a User Roles</label>
+        <>
+          <label for="ur"><h2>Choose a User Roles</h2></label>
           <select name="ur"
             id="userroles" onChange={this.handleInputChange}>
             {userRolesPool.map(ur => (
               <option value={ur._id}>{ur.role}</option>
             ))}
           </select>
-          <input type="submit" value="Submit" />
-        </form>
+        </>
       );
   }
 }
