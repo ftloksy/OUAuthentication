@@ -4,6 +4,7 @@ import CreateEmployee from './components/CreateEmployee';
 import UserRoleSelecter from './components/UserRoleSelecter';
 import LocalStorageButton from './labcomponents/LocalStorageButton'
 import OuLogin from './components/OuLogin'
+import EmpRegForm from './labcomponents/EmpRegForm';
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
         <LocalStorageButton />
 
         <OuLogin />
+
+        <EmpRegForm />
         
       </header>
     </div>
