@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 import { Employees, 
   OrgUnitsDivisions, 
@@ -36,6 +37,7 @@ class  OrgUnitsAuth {
       }
 
       Employees.findOne(findEmployeesFilter)
+      .populate('userrole')
       .then((userObj) => {
         if (userObj) {
           console.log("Login: ");
@@ -46,7 +48,8 @@ class  OrgUnitsAuth {
               {
                 id: userObj._id,
                 firstname: userObj.firstname,
-                lastname: userObj.lastname
+                lastname: userObj.lastname,
+                userrole: userObj.userrole.role
               },
               this.secretKey,
               { expiresIn: '1h' }
@@ -55,7 +58,8 @@ class  OrgUnitsAuth {
               msg: "Login Success!",
               token: loginToken,
               firstname: userObj.firstname,
-              lastname: userObj.lastname
+              lastname: userObj.lastname,
+              userrole: userObj.userrole.role
             });        
           } else {
             res.status(401).json({msg: "Invalid username or password"});
@@ -79,7 +83,8 @@ class  OrgUnitsAuth {
         req.decoded = decoded;
         req.foundObj = {
           firstname: decoded.firstname,
-          lastname: decoded.lastname
+          lastname: decoded.lastname,
+          userrole: decoded.userrole
         }
         next();
       } catch ( err ) {
@@ -103,6 +108,60 @@ class  OrgUnitsAuth {
         req.foundObj = emp;
         next();
       })
+    }
+  }
+
+  createUser() {
+    return async (req, res, next) => {
+      console.log("Firstname: ", req.body.firstname);
+      console.log("Lastname: ", req.body.lastname);
+      console.log("Address: ", req.body.address);
+      console.log("Telephone: ", req.body.telephone);
+      console.log("Email: ", req.body.email);
+      console.log("Loginname: ", req.body.loginname);
+      console.log("Password: ", req.body.password);
+      console.log("Userrole: ", req.body.userrole);
+      console.log("Divisions: ", req.body.divs);
+      console.log("Org Units - Divisions: ", req.body.oudivs);
+
+      const record = new Employees({
+        _id: new mongoose.Types.ObjectId(),
+        userrole: req.body.userrole,
+        divs: req.body.divs,
+        oudivs: req.body.oudivs,
+        loginname: req.body.loginname,
+        password: req.body.password,
+        email: req.body.email,
+        telephone: req.body.telephone,
+        address: req.body.address,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname
+      });
+      
+      await record.save();
+      res.json({msg: "Record Saved."})
+
+      // const obj = await record.save();
+      // console.log("Create User Obj: ", obj);
+      // const returnObj = {
+      //   firstname: obj.firstname,
+      //   lastname: obj.lastname,
+      //   email: obj.email,
+      //   telephone: obj.telephone,
+      //   address: obj.address,
+      //   loginname: obj.loginname,
+      // }
+      
+      // try {
+      //     const parsedData = JSON.parse(returnObj);
+      //     console.log('JSON data is valid:', parsedData);
+      //   } catch (error) {
+      //     console.error('Invalid JSON data:', error);
+      //   }
+
+      // res.foundObj = obj;
+      // next();
+
     }
   }
 
@@ -133,10 +192,10 @@ class  OrgUnitsAuth {
 
   regUser() {
     return (req, res, next) => {
-      const userObj = req.decoded;
-      console.log("User id in regUser: ");
-      console.log(userObj.id);
-      Employees.findByIdAndUpdate(userObj.id, req.body)
+      //const userObj = req.decoded;
+      //console.log("User id in regUser: ");
+      //console.log(userObj.id);
+      Employees.findByIdAndUpdate(req.params.uid, req.body)
       .then((emp, err) => {
         req.err = err;
         req.foundObj = emp;
@@ -231,6 +290,30 @@ class  OrgUnitsAuth {
         req.err = err;
         next();
       });
+    }
+  }
+
+  getEmployees() {
+    return (req, res, next) => {
+      Employees.find()
+      .then((emp, err) => {
+        console.log("Emps List: ", emp)
+        req.err = err;
+        req.foundObj = emp;
+        next();
+      })
+    }
+  }
+
+  findUserById() {
+    return (req, res, next) => {
+      const userObj = req.decoded;
+      Employees.findById(req.params.empid)
+      .then((emp, err) => {
+        req.err = err;
+        req.foundObj = emp;
+        next();
+      })
     }
   }
 

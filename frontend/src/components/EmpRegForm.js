@@ -18,44 +18,47 @@ class EmpRegForm extends Component {
     async handleInputChange(event) {
         event.preventDefault();
         const { name, value } = event.target;
+        this.setState(this.props.empinfo);
         await this.setState( { [name]: value } );
         this.props.onSelect(this.state);
     }
 
     render() {
 
-        const {
-            loginname, password, email,
-            telephone, address, firstname, lastname } = this.state;
+        // const {
+        //     loginname, password, email,
+        //     telephone, address, firstname, lastname } = this.state;
+
+        const { empinfo } = this.props;
         
         const textFields = [
                 {
                     name: 'loginname',
-                    ref: loginname
+                    ref: empinfo.loginname
                 }, 
                 {
                     name: 'password',
-                    ref: password
+                    ref: empinfo.password
                 }, 
                 {
                     name: 'email',
-                    ref: email
+                    ref: empinfo.email
                 },
                 {
                     name: 'telephone',
-                    ref: telephone
+                    ref: empinfo.telephone
                 }, 
                 {
                     name: 'address',
-                    ref: address
+                    ref: empinfo.address
                 }, 
                 {
                     name: 'firstname',
-                    ref: firstname
+                    ref: empinfo.firstname
                 },
                 {
                     name: 'lastname',
-                    ref: lastname
+                    ref: empinfo.lastname
                 }]
 
         return (

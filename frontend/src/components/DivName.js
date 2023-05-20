@@ -6,6 +6,7 @@ class OuDivName extends Component {
     this.state = {
         divName: ""
      };
+     this.fetchNames = this.fetchNames.bind(this);
   };
 
   componentDidMount() {

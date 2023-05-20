@@ -22,12 +22,12 @@ class OuDivSelecter extends Component {
       if (!response.ok){
         throw Error(response.statusText);
       }
-      response.json().then(OrgUnits => {
+      response.json().then( async OrgUnits => {
         let orgUnitsPool = [{_id: "", name: ""}];
         OrgUnits.forEach( ou => {
           orgUnitsPool.push(ou);
         })
-        this.setState( { orgUnitsPool } );
+        await this.setState( { orgUnitsPool } );
         console.log( orgUnitsPool );
       })
     })
@@ -35,13 +35,15 @@ class OuDivSelecter extends Component {
 
   handleInputSubmit(event) {
     event.preventDefault();
+    const { choiceOuDiv } = this.state;
+    console.log( "Choice Org Units & Divisions: ", choiceOuDiv );
     //const { name, id, value } = event.target;
     //this.setState( { })
     //console.log(event);
-    this.props.onSubmit(this.state.choiceOuDiv);
+    this.props.onSubmit( choiceOuDiv);
   }
 
-  handleInputChange(event) {
+  async handleInputChange(event) {
     event.preventDefault();
     const { name, id, value } = event.target;
     if ( name === "ou" && value ) {
@@ -51,23 +53,23 @@ class OuDivSelecter extends Component {
         if (!response.ok) {
           throw Error(response.statusText);
         }
-        response.json().then(divisions => {
+        response.json().then(async divisions => {
           let divisionsPool = [];
           divisions.forEach((ouDiv) => {
             divisionsPool.push( { id: ouDiv._id, div: ouDiv.divisions } );
           })
-          this.setState({divisionsPool});
+          await this.setState({divisionsPool});
           console.log(divisionsPool);
         })
       })
     } else if ( name === "ou" && !value ) {
-      this.setState({
+      await this.setState({
         divisionsPool: [],
         choiceOuDiv: ""
       })
     }
     if (name === "dv") {
-      this.setState({choiceOuDiv: value})
+      await this.setState({choiceOuDiv: value})
     }
   }
 

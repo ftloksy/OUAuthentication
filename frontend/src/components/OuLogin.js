@@ -5,6 +5,7 @@
 
 import React, { Component } from 'react';
 import { MD5 } from 'crypto-js';
+import ListEmployees from './ListEmployees';
 
 class OuLogin extends Component {
     constructor(props) {
@@ -16,7 +17,8 @@ class OuLogin extends Component {
             logined: false,
             firstname: "",
             lastname: "",
-            errorMessage: ""
+            userrole: "",
+            errorMessage: "",
         };
         this.storageToken = this.storageToken.bind(this);
         this.handleInputSubmit = this.handleInputSubmit.bind(this);
@@ -38,11 +40,12 @@ class OuLogin extends Component {
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('has Token localStorage and Data: ', data);
-                    this.setState({
+                    console.log('has Token localStorage and Data ( Test 2 ): ', data);
+                    await this.setState({
                         logined: true,
                         firstname: data.firstname,
                         lastname: data.lastname,
+                        userrole: data.userrole,
                         errorMessage: "",
                     })
                 } else {
@@ -56,8 +59,6 @@ class OuLogin extends Component {
         } else {
             console.log("Don't has any record.");
         }
-
-
     }
 
     async storageToken(login, password) {
@@ -76,19 +77,20 @@ class OuLogin extends Component {
                 const data = await response.json();
                 localStorage.setItem("token", data.token);
                 console.log("Token : ", data.token);
-                console.log("Data: ", data)
-                this.setState({
+                console.log("Data: ", data) // Notice: Token has not userrole value. Please modify about it.
+                await this.setState({
                     logined: true,
                     token: data.token,
                     firstname: data.firstname,
                     lastname: data.lastname,
-                    errorMessage: ""
+                    userrole: data.userrole,
+                    errorMessage: "",
                 })
             } else {
                 console.log("Error Status: ", response.status);
                 const data = await response.json();
                 console.log("Error Message: ", data.msg);
-                this.setState({
+                await this.setState({
                     errorMessage: data.msg
                 })
             }
@@ -97,38 +99,39 @@ class OuLogin extends Component {
         }
     }
 
-    handleInputSubmit(event) {
+    async handleInputSubmit(event) {
         event.preventDefault();
         const { login, password } = this.state;
-        this.storageToken(login, password);
+        await this.storageToken(login, password);
     }
 
-    handleInputChange(event) {
+    async handleInputChange(event) {
         event.preventDefault();
         const { name, value } = event.target;
         if ( name === "passwd" ) {
-            this.setState({password: value});
+            await this.setState({password: value});
         } else if ( name === "login" ) {
-            this.setState({login: value});
+            await this.setState({login: value});
         }
     }
 
-    logoutAndForgetToken(event){
+    async logoutAndForgetToken(event){
         event.preventDefault();
         localStorage.removeItem("token");
-        this.setState({
+        await this.setState({
             logined: false,
             login: "",
             password: "",
             token: "",
             firstname: "",
             lastname: "",
-            errorMessage: ""
+            userrole: "",
+            errorMessage: "",
         })
     }
 
     render() {
-        const { login, password, 
+        const { login, password, userrole, listEmpComponent,
             firstname, lastname, logined, errorMessage } = this.state;
 
         return (
@@ -139,8 +142,10 @@ class OuLogin extends Component {
             }
             {logined 
             ? ( <>
-                    <h1>Welcome: {firstname}, {lastname}</h1>
+                    <h1>Welcome: {firstname}, {lastname} ( {userrole} )</h1>
                     <button onClick={this.logoutAndForgetToken}>Logout</button>
+                    <hr/>
+                    <ListEmployees />
                 </>)
             : ( <form onSubmit={(event) => this.handleInputSubmit(event)}>
                     <h2>Login</h2>
@@ -162,7 +167,6 @@ class OuLogin extends Component {
             </>
         )
     }
-  
 }
 
 export default OuLogin;

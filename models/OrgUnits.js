@@ -36,8 +36,8 @@ const userRolesSchema = new Schema({
 const employeesSchema = new Schema({
   _id: Schema.Types.ObjectId,
   userrole: { type: Schema.Types.ObjectId, ref: "UserRoles" },
-  ou: [{ type: Schema.Types.ObjectId, ref: "OrgUnits" }],
-  oudiv: [{ type: Schema.Types.ObjectId, ref: "OrgUnitsDivisions" }],
+  divs: [{ type: Schema.Types.ObjectId, ref: "Divisions" }],
+  oudivs: [{ type: Schema.Types.ObjectId, ref: "OrgUnitsDivisions" }],
   loginname: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   email: String,

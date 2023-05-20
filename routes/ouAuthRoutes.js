@@ -13,9 +13,13 @@ router.post('/test', ouAuth.testLogin());
 
 router.post('/auth', ouAuth.loginAuth());
 
+router.post('/createuser', ouAuth.createUser(), ouAuth.sendObj());
+
 router.get('/checktoken', ouAuth.chkToken(), ouAuth.sendObj());
 
 router.get('/finduser/:uid', ouAuth.chkToken(), ouAuth.findUser(), ouAuth.sendObj());
+
+router.get('/finduserbyid/:empid', ouAuth.chkToken(), ouAuth.findUserById(), ouAuth.sendObj());
 
 router.post('/reguser/:uid', ouAuth.chkToken(), ouAuth.regUser(), ouAuth.sendObj());
 
@@ -26,6 +30,8 @@ router.get('/getoudiv/:ouid', ouAuth.getOrgUnitDiv(), ouAuth.sendObj());
 router.get('/getou', ouAuth.getOrgUnits(), ouAuth.sendObj());
 
 router.get('/getdiv', ouAuth.getDivs(), ouAuth.sendObj());
+
+router.get('/getemps', ouAuth.chkToken(), ouAuth.getEmployees(), ouAuth.sendObj());
 
 router.get('/getoudivnamebyid/:oudivid', ouAuth.getOrgUnitsDivById(), ouAuth.sendObj());
 

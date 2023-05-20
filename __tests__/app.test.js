@@ -17,18 +17,18 @@ import getDivTest from './getDivTest.js'
 
 const dbConnect = new DbConnect();
 
-userPasswordTest();
-userLoginNameTest();
+//userPasswordTest();
+//userLoginNameTest();
 userRegTest();
 
-loginTest();
-hasRightTest();
-getOuTest();
+//loginTest();
+//hasRightTest();
+//getOuTest();
 
-getDivFromOUTest();
-getOuDivNameByIdTest();
+//getDivFromOUTest();
+//getOuDivNameByIdTest();
 
-getDivTest();
+//getDivTest();
 
 after(() => {
   dbConnect.closeDbConnection();

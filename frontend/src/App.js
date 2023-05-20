@@ -1,8 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
 import CreateEmployee from './components/CreateEmployee';
-import LocalStorageButton from './labcomponents/LocalStorageButton'
-import OuLogin from './components/OuLogin'
+import LocalStorageButton from './labcomponents/LocalStorageButton';
+import OuLogin from './components/OuLogin';
+
+
+
+// <CreateEmployee />
+
+// <LocalStorageButton />
 
 function App() {
   return (
@@ -20,11 +26,8 @@ function App() {
         >
           Learn React
         </a>
+
         <OuLogin />
-
-        <CreateEmployee />
-
-        <LocalStorageButton />
         
       </header>
     </div>

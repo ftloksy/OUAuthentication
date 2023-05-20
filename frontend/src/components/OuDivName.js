@@ -7,6 +7,7 @@ class OuDivName extends Component {
         ouName: "",
         divName: ""
      };
+     this.fetchNames = this.fetchNames.bind(this);
   };
 
   componentDidMount() {
