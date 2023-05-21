@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import DivName from './DivName';
 
 class DivSelecter extends Component {
   constructor(props) {
@@ -16,20 +17,33 @@ class DivSelecter extends Component {
   }
 
   async fetchDiv() {
-    fetch('/login/getdiv')
-    .then(response => {
-      if (!response.ok){
-        throw Error(response.statusText);
-      }
-      response.json().then( divs => {
-        let divisionsPool = [{_id: "", name: ""}];
-        divs.forEach( dv => {
-          divisionsPool.push(dv);
+    const token = localStorage.getItem('token');
+    if ( token ) {
+      console.log("Storaged Token: ", token);
+
+      fetch('/login/getadmindiv', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      .then(response => {
+        if (!response.ok){
+          throw Error(response.statusText);
+        }
+        response.json().then( divs => {
+          let divisionsPool = [""];
+          divs.forEach( dv => {
+            divisionsPool.push(dv);
+          })
+          this.setState( { divisionsPool: divisionsPool } );
+          console.log( divisionsPool );
         })
-        this.setState( { divisionsPool: divisionsPool } );
-        console.log( divisionsPool );
       })
-    })
+
+    } else {
+      console.log("Don't has any record.");
+    }
   }
 
   handleInputSubmit(event) {
@@ -54,7 +68,7 @@ class DivSelecter extends Component {
           <select name="dv"
             id="division" onChange={this.handleInputChange}>
             {divisionsPool.map(dv => (
-              <option value={dv._id}>{dv.name}</option>
+              <option value={dv}><DivName divid={dv} /></option>
             ))}
           </select>
           <input type="submit" value="Submit" />

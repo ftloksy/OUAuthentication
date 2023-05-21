@@ -21,6 +21,11 @@ class OuLogin extends Component {
             firstname: "",
             lastname: "",
             userrole: "",
+            read: false,
+            addnew: false,
+            update: false,
+            assign: false,
+            unassign: false,
             divisions: [],
             errorMessage: "",
         };
@@ -53,6 +58,11 @@ class OuLogin extends Component {
                         lastname: data.lastname,
                         userrole: data.userrole,
                         divisions: data.divisions,
+                        read: data.read,
+                        addnew: data.addnew,
+                        update: data.update,
+                        assign: data.assign,
+                        unassign: data.unassign,
                         errorMessage: "",
                     })
                 } else {
@@ -83,6 +93,11 @@ class OuLogin extends Component {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("token", data.token);
+                localStorage.setItem("can_read", data.read);
+                localStorage.setItem("can_addnew", data.addnew);
+                localStorage.setItem("can_update", data.update);
+                localStorage.setItem("can_assign", data.assign);
+                localStorage.setItem("can_unassign", data.unassign);
                 console.log("Token : ", data.token);
                 console.log("Data: ", data) // Notice: Token has not userrole value. Please modify about it.
                 await this.setState({
@@ -92,6 +107,11 @@ class OuLogin extends Component {
                     lastname: data.lastname,
                     userrole: data.userrole,
                     divisions: data.divisions,
+                    read: data.read,
+                    addnew: data.addnew,
+                    update: data.update,
+                    assign: data.assign,
+                    unassign: data.unassign,
                     errorMessage: "",
                 })
             } else {
@@ -126,6 +146,11 @@ class OuLogin extends Component {
     async logoutAndForgetToken(event){
         event.preventDefault();
         localStorage.removeItem("token");
+        localStorage.removeItem("can_read");
+        localStorage.removeItem("can_addnew");
+        localStorage.removeItem("can_update");
+        localStorage.removeItem("can_assign");
+        localStorage.removeItem("can_unassign");
         await this.setState({
             logined: false,
             login: "",
@@ -134,6 +159,11 @@ class OuLogin extends Component {
             firstname: "",
             lastname: "",
             userrole: "",
+            read: false,
+            addnew: false,
+            update: false,
+            assign: false,
+            unassign: false,
             divisions: [],
             errorMessage: "",
         })
@@ -143,6 +173,8 @@ class OuLogin extends Component {
         console.log("chiceDivListEmp: ", dv);
         if ( this.listEmployees.current ) {
            await this.listEmployees.current.fetchNames();
+           await this.listEmployees.current.disableForm();    
+           await this.listEmployees.current.updateDivTitle(dv);
         };
         await this.setState({
             selectedDiv: true,
@@ -165,6 +197,7 @@ class OuLogin extends Component {
                     <h1>Welcome: {firstname}, {lastname} ( {userrole} )</h1>
                     <button onClick={this.logoutAndForgetToken}>Logout</button>
                     <hr/>
+                    <h2>Divisions:</h2>
                     <ul>
                         {divisions.map(dv => (
                             <li>

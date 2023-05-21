@@ -29,12 +29,7 @@ class  OrgUnitsAuth {
       const login = req.body.login;
       const passwd = req.body.password;
 
-      const findEmployeesFilter = {
-        $or: [
-          { password: passwd },
-          { loginname: login }
-        ]
-      }
+      const findEmployeesFilter = { loginname: login };
 
       Employees.findOne(findEmployeesFilter)
       .populate('userrole')
@@ -50,6 +45,11 @@ class  OrgUnitsAuth {
                 firstname: userObj.firstname,
                 lastname: userObj.lastname,
                 userrole: userObj.userrole.role,
+                read: userObj.userrole.read,
+                addnew: userObj.userrole.addnew,
+                update: userObj.userrole.update,
+                assign: userObj.userrole.assign,
+                unassign: userObj.userrole.assign,
                 divisions: userObj.divs
               },
               this.secretKey,
@@ -61,6 +61,11 @@ class  OrgUnitsAuth {
               firstname: userObj.firstname,
               lastname: userObj.lastname,
               userrole: userObj.userrole.role,
+              read: userObj.userrole.read,
+              addnew: userObj.userrole.addnew,
+              update: userObj.userrole.update,
+              assign: userObj.userrole.assign,
+              unassign: userObj.userrole.assign,
               divisions: userObj.divs
             });        
           } else {
@@ -87,7 +92,12 @@ class  OrgUnitsAuth {
           firstname: decoded.firstname,
           lastname: decoded.lastname,
           userrole: decoded.userrole,
-          divisions: decoded.divisions
+          divisions: decoded.divisions,
+          read: decoded.read,
+          addnew: decoded.addnew,
+          update: decoded.update,
+          assign: decoded.assign,
+          unassign: decoded.assign
         }
         next();
       } catch ( err ) {
@@ -230,16 +240,11 @@ class  OrgUnitsAuth {
     }
   }
 
-  getDivs() {
+  getAdminDivs() {
     return (req, res, next) => {
-      Divisions.find()
-      .then((div, err) => {
-        req.foundObj = div;
-        console.log("Found Div: ");
-        console.log(req.foundObj);
-        req.err = err;
-        next();
-      });
+      const userObj = req.decoded;
+      req.foundObj = req.decoded.divisions;
+      next();
     }
   }
 
@@ -321,7 +326,6 @@ class  OrgUnitsAuth {
 
   findUserById() {
     return (req, res, next) => {
-      const userObj = req.decoded;
       Employees.findById(req.params.empid)
       .populate('userrole')
       .then((emp, err) => {
@@ -331,7 +335,6 @@ class  OrgUnitsAuth {
       })
     }
   }
-
 }
 
 export default OrgUnitsAuth;

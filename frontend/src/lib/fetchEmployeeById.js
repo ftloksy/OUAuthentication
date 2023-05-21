@@ -24,11 +24,11 @@ class fetchEmployeeById {
                     <li>user role: {userRole.role}</li>
                     {orgUnitDivsGroup.map(ous => (
                       <li>
-                        <OuDivName oudivid={ous} />
+                        Organisational Units / Divisions: <OuDivName oudivid={ous} />
                       </li>
                     ))}
                     {divsGroup.map(dvs => (
-                      <li> <DivName divid={dvs} /> </li>
+                      <li>Divisions: <DivName divid={dvs} /> </li>
                     ))}
                 </ul> 
             )

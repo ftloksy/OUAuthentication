@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { Employees,  OrgUnitsDivisions } from '../models/OrgUnits.js';
 import DbConnect from '../database/DbConnect.js';
 
@@ -7,27 +8,15 @@ describe('DbTest', () => {
 
   it('Test Db', (done) => {
 
-    Employees.findById('64666cbd2a9a315ac1d100bc')
-    .populate('userrole')
-    .then((emp, err) => {
-      console.log("Has Right HERE.");
-      console.log(emp);
-      console.log(err);
-    });
-    
-    
-    OrgUnitsDivisions.find({orgunits: "645e0fa6cd5fd11e6ced64f6"})
-    .populate('orgunits')
-    .populate('divisions')
-    .then((oudiv, err) => {
-      console.log("OUDIV HERE.");
-      console.log(oudiv);
-      console.log(err);
-    });
+    const docs = new OrgUnitsDivisions.aggregate([
+      { $match: {divisions: new mongoose.Types.ObjectId("646251e7b3d4690051f4350f") }},
+      { "$group": { "_id": "$orgunits" }}
+    ]);
+
+    console.log(docs);
 
     done();
   })
-
 })
 
 after(() => {

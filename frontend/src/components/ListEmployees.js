@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import CreateEmployee from './CreateEmployee'
+import CreateEmployee from './CreateEmployee';
+import DivName from './DivName';
 
 class OuDivName extends Component {
   constructor(props) {
@@ -7,11 +8,13 @@ class OuDivName extends Component {
     this.state = { 
         emps: [],
         empId: "",
-        displayForm: false
+        displayForm: false,
     };
     this.disableForm = this.disableForm.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
     this.fetchNames = this.fetchNames.bind(this);
+
+    this.divName = React.createRef();
   };
 
   componentDidMount() {
@@ -49,16 +52,24 @@ class OuDivName extends Component {
   async handleButtonClick(event, empId) {
     event.preventDefault();
     console.log("Employees Id: ", empId);
-    await this.setState({empId, displayForm: true});
+    await this.setState({
+        empId, displayForm: true});
   }
 
   async disableForm() {
     await this.setState({displayForm: false})
   }
 
+  async updateDivTitle(urlEndPart) {
+    if ( this.divName.current ) {
+        await this.divName.current.fetchNames(urlEndPart);
+    }
+  }
+
   render() {
     
         const { emps, empId, displayForm } = this.state ;
+        const { choiceddiv } = this.props;
 
         return (
             <>
@@ -66,7 +77,10 @@ class OuDivName extends Component {
                 ? ( <CreateEmployee 
                       onUpdateEmpList={this.fetchNames} 
                       empId={empId} onDisableForm={this.disableForm} /> )
-                : ( <ul>
+                : ( 
+                    <>
+                      <h2><DivName divid={choiceddiv} ref={this.divName}/></h2>
+                      <ul>
                         {emps.map ( emp => (
                          <>
                             <li>
@@ -80,7 +94,8 @@ class OuDivName extends Component {
                               Create a New Employees
                             </button>
                         </li>
-                    </ul> )
+                      </ul>
+                    </>)
                 }
             </>
         );

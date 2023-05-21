@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class OuDivName extends Component {
+class DivName extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -10,11 +10,11 @@ class OuDivName extends Component {
   };
 
   componentDidMount() {
-    this.fetchNames();
+    this.fetchNames(this.props.divid);
   }
 
-  async fetchNames() {
-    fetch('/login/getdivnamebyid/' + this.props.divid)
+  async fetchNames(urlEndPart) {
+    fetch('/login/getdivnamebyid/' + urlEndPart)
     .then(response => {
       if (!response.ok){
         throw Error(response.statusText);
@@ -34,9 +34,9 @@ class OuDivName extends Component {
   render() {
       const { divName } = this.state ;
       return (
-        <span>Division: {divName}</span>
+        <span>{divName}</span>
       );
   }
 }
 
-export default OuDivName;
+export default DivName;

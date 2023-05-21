@@ -43,7 +43,7 @@ class OuDivName extends Component {
   render() {
       const { ouName, divName } = this.state ;
       return (
-        <span>Org Unit: {ouName}, Division: {divName}</span>
+        <span> {ouName}, {divName}</span>
       );
   }
 }

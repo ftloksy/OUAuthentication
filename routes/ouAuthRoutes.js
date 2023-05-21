@@ -29,7 +29,7 @@ router.get('/getoudiv/:ouid', ouAuth.getOrgUnitDiv(), ouAuth.sendObj());
 
 router.get('/getou', ouAuth.getOrgUnits(), ouAuth.sendObj());
 
-router.get('/getdiv', ouAuth.getDivs(), ouAuth.sendObj());
+router.get('/getadmindiv', ouAuth.chkToken(), ouAuth.getAdminDivs(), ouAuth.sendObj());
 
 router.get('/getemps/:divid', ouAuth.chkToken(), ouAuth.getEmployees(), ouAuth.sendObj());
 

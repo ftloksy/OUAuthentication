@@ -8,9 +8,10 @@ describe('DbTest', () => {
 
   it('Test Db', async (done) => {
 
-    Employees.findById("64690e852ea75747a76b9140")
-    .select("oudivs")
-    .then((docs, err) => {
+    OrgUnitsDivisions.aggregate([
+      { $match: {divisions: new mongoose.Types.ObjectId("646251e7b3d4690051f4350f") }},
+      { "$group": { "_id": "$orgunits" }}
+    ]).then((docs, err) => {
       if (err) {
         console.log(err);
       } else {

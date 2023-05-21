@@ -34,6 +34,17 @@ class CreateEmployee extends Component {
     this.setEmployeesInfo = this.setEmployeesInfo.bind(this);
 
     this.handleButtonSubmit = this.handleButtonSubmit.bind(this);
+
+    this.token = localStorage.getItem('token');
+
+    this.userRight = {
+      read: localStorage.getItem("can_read"),
+      addnew: localStorage.getItem("can_addnew"),
+      update: localStorage.getItem("can_update"),
+      assign: localStorage.getItem("can_assign"),
+      unassign: localStorage.getItem("can_unassign")
+    }
+
   };
 
   async componentDidMount() {
@@ -74,7 +85,8 @@ class CreateEmployee extends Component {
 
   async handleButtonSubmit(event) {
     event.preventDefault();
-    const token = localStorage.getItem('token');
+    //const token = localStorage.getItem('token');
+    const token = this.token;
     const { empId } = this.props;
     
     const { orgUnitDivsGroup, 
@@ -152,6 +164,7 @@ class CreateEmployee extends Component {
   render() {
       const { orgUnitDivsGroup, orgUnitDivsSelect, 
         divsGroup, divsSelect, userRole, employeesInfo, errorMessage }  = this.state ;
+      const userRight = this.userRight ;
 
       return (
         <>
@@ -163,47 +176,52 @@ class CreateEmployee extends Component {
           {errorMessage
           ? (<h2>{errorMessage}</h2>)
           : <></> }
-          <div id="showoudivgroup">
-            <h2>Set Organisational Units / Divisions: </h2>
-            {orgUnitDivsSelect
-              ? <SetOuDivGroup 
-                  onSetDivGroup={(oudivGroup) => this.ouDivGroup(oudivGroup)}
-                  selectedoudiv={orgUnitDivsGroup}
-                />
-              : <> 
-              {orgUnitDivsGroup.map(oudiv => (
-                <div>
-                  <OuDivName oudivid={oudiv}/>
-                </div>
-              ))}
-              <br/>
-              <button onClick={this.setOuDivsSelect}>Update</button>
-              <hr/>
-            </>
-            }
-          </div>
 
-          <div id="showdivgroup">
-            <h2>Set Divisions: </h2>
-            {divsSelect
-              ? <SetDivGroup 
-                  onSetDivGroup={(dGroup) => this.divGroup(dGroup)}
-                  selectedoudiv={divsGroup}
-                />
-              : <> 
-              {divsGroup.map(dv => (
-                <div>
-                  <DivName divid={dv} />
-                </div>
-              ))}
-              <br/>
-              <button onClick={this.setDivsSelect}>Update</button>
-              <hr/>
-            </>
-            }
-          </div>
-          <UserRoleSelecter urid={userRole._id} onSelect={(ur) => this.setUserRole(ur)} />
-          <hr/>
+          {userRight.assign === "true" || userRight.unassign === "true"
+          ? ( <>
+            <div id="showoudivgroup">
+              <h2>Set Organisational Units / Divisions: </h2>
+              {orgUnitDivsSelect
+                ? <SetOuDivGroup 
+                    onSetDivGroup={(oudivGroup) => this.ouDivGroup(oudivGroup)}
+                    selectedoudiv={orgUnitDivsGroup}
+                  />
+                : <> 
+                {orgUnitDivsGroup.map(oudiv => (
+                  <div>
+                    <OuDivName oudivid={oudiv}/>
+                  </div>
+                ))}
+                <br/>
+                <button onClick={this.setOuDivsSelect}>Update</button>
+                <hr/>
+              </>
+              }
+            </div>
+  
+            <div id="showdivgroup">
+              <h2>Set Divisions: </h2>
+              {divsSelect
+                ? <SetDivGroup 
+                    onSetDivGroup={(dGroup) => this.divGroup(dGroup)}
+                    selectedoudiv={divsGroup}
+                  />
+                : <> 
+                {divsGroup.map(dv => (
+                  <div>
+                    <DivName divid={dv} />
+                  </div>
+                ))}
+                <br/>
+                <button onClick={this.setDivsSelect}>Update</button>
+                <hr/>
+              </>
+              }
+            </div>
+            <UserRoleSelecter urid={userRole._id} onSelect={(ur) => this.setUserRole(ur)} />
+            <hr/>
+          </>)
+          : (<></>) }
           
           <EmpRegForm empinfo={employeesInfo} onSelect={(emp) => this.setEmployeesInfo(emp)} />
           <hr/>

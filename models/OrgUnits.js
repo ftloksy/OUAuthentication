@@ -27,10 +27,10 @@ const userRolesSchema = new Schema({
     required: true
   },
   read: Boolean,
-  addnew: Boolean,
+  addnew: Boolean,   // I think it is renew the password.
   update: Boolean,
-  assing: Boolean,
-  unassing: Boolean
+  assign: Boolean,
+  unassign: Boolean
 });
 
 const employeesSchema = new Schema({
