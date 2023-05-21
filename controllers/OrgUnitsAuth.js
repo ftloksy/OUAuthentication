@@ -49,7 +49,8 @@ class  OrgUnitsAuth {
                 id: userObj._id,
                 firstname: userObj.firstname,
                 lastname: userObj.lastname,
-                userrole: userObj.userrole.role
+                userrole: userObj.userrole.role,
+                divisions: userObj.divs
               },
               this.secretKey,
               { expiresIn: '1h' }
@@ -59,7 +60,8 @@ class  OrgUnitsAuth {
               token: loginToken,
               firstname: userObj.firstname,
               lastname: userObj.lastname,
-              userrole: userObj.userrole.role
+              userrole: userObj.userrole.role,
+              divisions: userObj.divs
             });        
           } else {
             res.status(401).json({msg: "Invalid username or password"});
@@ -84,7 +86,8 @@ class  OrgUnitsAuth {
         req.foundObj = {
           firstname: decoded.firstname,
           lastname: decoded.lastname,
-          userrole: decoded.userrole
+          userrole: decoded.userrole,
+          divisions: decoded.divisions
         }
         next();
       } catch ( err ) {
@@ -305,7 +308,7 @@ class  OrgUnitsAuth {
 
   getEmployees() {
     return (req, res, next) => {
-      Employees.find()
+      Employees.find({ divs : req.params.divid })
       .then((emp, err) => {
         console.log("Emps List: ", emp)
         req.err = err;

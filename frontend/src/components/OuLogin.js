@@ -6,6 +6,7 @@
 import React, { Component } from 'react';
 import { MD5 } from 'crypto-js';
 import ListEmployees from './ListEmployees';
+import DivName from './DivName';
 
 class OuLogin extends Component {
     constructor(props) {
@@ -15,9 +16,12 @@ class OuLogin extends Component {
             password: "",
             token: "",
             logined: false,
+            selectedDiv: false,
+            choicedDiv: "",
             firstname: "",
             lastname: "",
             userrole: "",
+            divisions: [],
             errorMessage: "",
         };
         this.storageToken = this.storageToken.bind(this);
@@ -46,6 +50,7 @@ class OuLogin extends Component {
                         firstname: data.firstname,
                         lastname: data.lastname,
                         userrole: data.userrole,
+                        divisions: data.divisions,
                         errorMessage: "",
                     })
                 } else {
@@ -84,6 +89,7 @@ class OuLogin extends Component {
                     firstname: data.firstname,
                     lastname: data.lastname,
                     userrole: data.userrole,
+                    divisions: data.divisions,
                     errorMessage: "",
                 })
             } else {
@@ -126,13 +132,22 @@ class OuLogin extends Component {
             firstname: "",
             lastname: "",
             userrole: "",
+            divisions: [],
             errorMessage: "",
         })
     }
 
+    async choiceDivListEmps(event, dv) {
+        console.log("chiceDivListEmp: ", dv);
+        await this.setState({
+            selectedDiv: true,
+            choicedDiv: dv
+        })
+    }
+
     render() {
-        const { login, password, userrole, listEmpComponent,
-            firstname, lastname, logined, errorMessage } = this.state;
+        const { login, password, userrole, divisions, selectedDiv,
+            choicedDiv, firstname, lastname, logined, errorMessage } = this.state;
 
         return (
             <>
@@ -145,7 +160,19 @@ class OuLogin extends Component {
                     <h1>Welcome: {firstname}, {lastname} ( {userrole} )</h1>
                     <button onClick={this.logoutAndForgetToken}>Logout</button>
                     <hr/>
-                    <ListEmployees />
+                    <ul>
+                        {divisions.map(dv => (
+                            <li>
+                                <button onClick={event => this.choiceDivListEmps(event, dv)}>
+                                    <DivName divid={dv} />
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                    {selectedDiv
+                     ? ( <ListEmployees choiceddiv={choicedDiv} /> )
+                     : (<></>)
+                    }
                 </>)
             : ( <form onSubmit={(event) => this.handleInputSubmit(event)}>
                     <h2>Login</h2>

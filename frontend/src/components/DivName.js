@@ -14,27 +14,21 @@ class OuDivName extends Component {
   }
 
   async fetchNames() {
-    // if ( this.props.divid ) {
-      fetch('/login/getdivnamebyid/' + this.props.divid)
-      .then(response => {
-        if (!response.ok){
-          throw Error(response.statusText);
-        }
-        response.json().then(async dv => {
-          await this.setState( { 
-              divName: dv.name
-            } );
-          console.log( dv.name );
-        })
-      }) 
-      .catch( err => {
-        console.log("Error: ", err.message);
+    fetch('/login/getdivnamebyid/' + this.props.divid)
+    .then(response => {
+      if (!response.ok){
+        throw Error(response.statusText);
+      }
+      response.json().then(async dv => {
+        await this.setState( { 
+            divName: dv.name
+          } );
+        console.log( dv.name );
       })
-    // } else {
-    //   await this.setState ( {
-    //     divName: "unknown"
-    //   });
-    // }
+    }) 
+    .catch( err => {
+      console.log("Error: ", err.message);
+    })
   }
 
   render() {

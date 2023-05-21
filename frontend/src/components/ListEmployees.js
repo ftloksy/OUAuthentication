@@ -25,7 +25,7 @@ class OuDivName extends Component {
         console.log("Storaged Token: ", token);
 
         try {
-            const response = await fetch("/login/getemps", {
+            const response = await fetch("/login/getemps/" + this.props.choiceddiv, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

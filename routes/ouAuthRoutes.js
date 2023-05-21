@@ -31,7 +31,7 @@ router.get('/getou', ouAuth.getOrgUnits(), ouAuth.sendObj());
 
 router.get('/getdiv', ouAuth.getDivs(), ouAuth.sendObj());
 
-router.get('/getemps', ouAuth.chkToken(), ouAuth.getEmployees(), ouAuth.sendObj());
+router.get('/getemps/:divid', ouAuth.chkToken(), ouAuth.getEmployees(), ouAuth.sendObj());
 
 router.get('/getoudivnamebyid/:oudivid', ouAuth.getOrgUnitsDivById(), ouAuth.sendObj());
 
