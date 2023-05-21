@@ -69,7 +69,8 @@ class OuDivName extends Component {
                 : ( <ul>
                         {emps.map ( emp => (
                          <>
-                            <li>{emp._id}: {emp.firstname}, {emp.lastname}
+                            <li>
+                                {emp.firstname}, {emp.lastname} ( {emp.userrole.role} )
                                 <button onClick={(event) => this.handleButtonClick(event, emp._id)}>Update</button>
                             </li>
                             </>
@@ -83,7 +84,7 @@ class OuDivName extends Component {
                 }
             </>
         );
-  }
+    }
 }
 
 export default OuDivName;

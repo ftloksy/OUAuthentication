@@ -309,6 +309,7 @@ class  OrgUnitsAuth {
   getEmployees() {
     return (req, res, next) => {
       Employees.find({ divs : req.params.divid })
+      .populate('userrole')
       .then((emp, err) => {
         console.log("Emps List: ", emp)
         req.err = err;

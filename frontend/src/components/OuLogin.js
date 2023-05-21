@@ -28,6 +28,8 @@ class OuLogin extends Component {
         this.handleInputSubmit = this.handleInputSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.logoutAndForgetToken = this.logoutAndForgetToken.bind(this);
+
+        this.listEmployees = React.createRef();
     };
 
     async componentDidMount() {
@@ -139,6 +141,9 @@ class OuLogin extends Component {
 
     async choiceDivListEmps(event, dv) {
         console.log("chiceDivListEmp: ", dv);
+        if ( this.listEmployees.current ) {
+           await this.listEmployees.current.fetchNames();
+        };
         await this.setState({
             selectedDiv: true,
             choicedDiv: dv
@@ -170,7 +175,7 @@ class OuLogin extends Component {
                         ))}
                     </ul>
                     {selectedDiv
-                     ? ( <ListEmployees choiceddiv={choicedDiv} /> )
+                     ? ( <ListEmployees choiceddiv={choicedDiv} ref={this.listEmployees} /> )
                      : (<></>)
                     }
                 </>)
