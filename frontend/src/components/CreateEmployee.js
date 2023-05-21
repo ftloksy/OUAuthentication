@@ -7,6 +7,7 @@ import OuDivName from './OuDivName';
 import DivName from './DivName';
 import UserRoleSelecter from './UserRoleSelecter';
 import EmpRegForm from './EmpRegForm';
+import fetchEmployeeById from '../lib/fetchEmployeeById';
 
 class CreateEmployee extends Component {
   constructor(props) {
@@ -20,6 +21,9 @@ class CreateEmployee extends Component {
       divsSelect: false,
       errorMessage: ""
     };
+
+    this.fetchEmp = new fetchEmployeeById(this.props.empId);
+
     this.ouDivGroup = this.ouDivGroup.bind(this);
     this.setOuDivsSelect = this.setOuDivsSelect.bind(this);
 
@@ -33,50 +37,9 @@ class CreateEmployee extends Component {
   };
 
   async componentDidMount() {
-    console.log("I am in componentDidMount at CreateEmployee");
-    const token = localStorage.getItem('token');
-    if ( token ) {
-        console.log("Storaged Token: ", token);
-
-        if (this.props.empId) {
-          try {
-            const response = await fetch("/login/finduserbyid/" + this.props.empId, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('has Token localStorage and Data: ', data);
-
-                await this.setState ({
-                  orgUnitDivsGroup: data.oudivs ,
-                  divsGroup: data.divs,
-                  userRole: data.userrole,
-                  employeesInfo: {
-                    firstname: data.firstname,
-                    lastname:  data.lastname,
-                    email: data.email,
-                    address: data.address,
-                    telephone: data.telephone,
-                    loginname: data.loginname,
-                    password: "*********",
-                  },
-                });
-
-            } else {
-                console.log('Error:', response.statusText);
-            }
-  
-          } catch (err) {
-              console.log("Error : ", err.message);
-          }
-        }
-
-    } else {
-        console.log("Don't has any token.");
-    }   
+    const getEmpInfo = await this.fetchEmp.fetch();
+    console.log("CreateEmployees componentDidMount", getEmpInfo);
+    await this.setState(getEmpInfo);
   }
 
   ouDivGroup(oudivGroup) {
@@ -192,23 +155,9 @@ class CreateEmployee extends Component {
 
       return (
         <>
-          <h1>{this.props.empId}</h1>
-          <ul>
-            <li>Name: {employeesInfo.firstname}, {employeesInfo.lastname}</li>
-            <li>Email: {employeesInfo.email}</li>
-            <li>Address: {employeesInfo.address}</li>
-            <li>Telephone: {employeesInfo.telephone}</li>
-            <li>Loginname: {employeesInfo.loginname}</li>
-            <li>Lastname: {employeesInfo.lastname}</li>
-            <li>password: {employeesInfo.password}</li>
-            <li>user role: {userRole}</li>
-            {orgUnitDivsGroup.map(ous => (
-              <li>Org Units Divisions: {ous}</li>
-            ))}
-            {divsGroup.map(dvs => (
-              <li>Divisions: {dvs}</li>
-            ))}
-          </ul>
+          {this.fetchEmp.getHello()}
+          <hr/>
+          {this.fetchEmp.listEmployeeInfo()}
           <hr/>
 
           {errorMessage
@@ -252,12 +201,14 @@ class CreateEmployee extends Component {
               <hr/>
             </>
             }
-              <UserRoleSelecter urid={userRole} onSelect={(ur) => this.setUserRole(ur)} />
-              <hr/>
-              <EmpRegForm empinfo={employeesInfo} onSelect={(emp) => this.setEmployeesInfo(emp)} />
-              <hr/>
-              <button onClick={this.handleButtonSubmit}>Create Employee Account</button>
           </div>
+          <UserRoleSelecter urid={userRole._id} onSelect={(ur) => this.setUserRole(ur)} />
+          <hr/>
+          
+          <EmpRegForm empinfo={employeesInfo} onSelect={(emp) => this.setEmployeesInfo(emp)} />
+          <hr/>
+          <button onClick={this.handleButtonSubmit}>Create Employee Account</button>
+
         </>
       );
   }

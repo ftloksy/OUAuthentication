@@ -268,28 +268,38 @@ class  OrgUnitsAuth {
 
   getOrgUnitsDivById() {
     return (req, res, next) => {
-      OrgUnitsDivisions.findById(req.params.oudivid)
-      .populate('orgunits')
-      .populate('divisions')
-      .then((oudiv, err) => {
-        req.foundObj = { 
-          orgunitsname: oudiv.orgunits.name,
-          divisionsname: oudiv.divisions.name
-        }
-        req.err = err;
-        next();
-      });
+      if ( req.params.oudivid !== "undefined" ) {
+        OrgUnitsDivisions.findById(req.params.oudivid)
+        .populate('orgunits')
+        .populate('divisions')
+        .then((oudiv, err) => {
+          req.foundObj = { 
+            orgunitsname: oudiv.orgunits.name,
+            divisionsname: oudiv.divisions.name
+          }
+          req.err = err;
+          next();
+        });
+      } else {
+        req.err = { msg: "oudivid is undefined."};
+        req.foundObj = {};
+      }
     }
   }
 
   getDivById() {
     return (req, res, next) => {
-      Divisions.findById(req.params.divid)
-      .then((dv, err) => {
-        req.foundObj = dv;
-        req.err = err;
-        next();
-      });
+      if ( req.params.divid !== "undefined" ) {
+        Divisions.findById(req.params.divid)
+        .then((dv, err) => {
+          req.foundObj = dv;
+          req.err = err;
+          next();
+        });
+      } else {
+        req.err = { msg: "divid is undefined."}
+        req.foundObj = {};
+      }
     }
   }
 
@@ -309,6 +319,7 @@ class  OrgUnitsAuth {
     return (req, res, next) => {
       const userObj = req.decoded;
       Employees.findById(req.params.empid)
+      .populate('userrole')
       .then((emp, err) => {
         req.err = err;
         req.foundObj = emp;

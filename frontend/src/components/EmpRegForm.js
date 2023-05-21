@@ -62,24 +62,22 @@ class EmpRegForm extends Component {
                 }]
 
         return (
-            <>
-                    <h2>Registration Employees Form: </h2>
+            <div className="EmpRegInput">
+                <h2>Registration Employees Form: </h2>
 
-                    {textFields.map(field => (
-                        <>
-                            <label for={field.name}>{field.name.toUpperCase()}: </label>
-                            <input type="text"
-                                id={field.name}
-                                name={field.name}
-                                value={field.ref}
-                                onChange={(event) => this.handleInputChange(event)}/><br/>
-                        </>
-                    ))}
-            </>
-
+                {textFields.map(field => (
+                    <>
+                        <label for={field.name}>{field.name.toUpperCase()}: </label>
+                        <input type="text"
+                            id={field.name}
+                            name={field.name}
+                            value={field.ref}
+                            onChange={(event) => this.handleInputChange(event)}/><br/>
+                    </>
+                ))}
+            </div>
         )
     }
-  
 }
 
 export default EmpRegForm;

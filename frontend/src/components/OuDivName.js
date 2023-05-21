@@ -15,6 +15,7 @@ class OuDivName extends Component {
   }
 
   async fetchNames() {
+    // if ( this.props.oudivid ) {
     fetch('/login/getoudivnamebyid/' + this.props.oudivid)
     .then(response => {
       if (!response.ok){
@@ -22,12 +23,21 @@ class OuDivName extends Component {
       }
       response.json().then(names => {
         this.setState( { 
-            ouName: names.orgunitsname,
-            divName: names.divisionsname
-          } );
+          ouName: names.orgunitsname,
+          divName: names.divisionsname
+        } );
         console.log( names );
       })
     })
+    .catch( err => {
+      console.log("Error: ", err.message);
+    })
+    // } else {
+    //   this.setState( {
+    //     ouName: "unknown",
+    //     divName: "unknown"
+    //   })
+    // }
   }
 
   render() {
