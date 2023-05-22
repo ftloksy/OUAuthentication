@@ -46,6 +46,7 @@ class OuDivSelecter extends Component {
   async handleInputChange(event) {
     event.preventDefault();
     const { name, id, value } = event.target;
+    console.log("In OuDivSelecter Id: ", id)
     if ( name === "ou" && value ) {
 
       fetch('/login/getoudiv/' + value)

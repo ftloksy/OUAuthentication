@@ -15,6 +15,7 @@ class SetOuDivGroup extends Component {
 
   componentDidMount() {
     if ( this.props.selectedoudiv ) {
+      console.log("Set Ou Div Group:")
       console.log( this.props.selectedoudiv );
       this.setState({orgUnitsDivChoice: this.props.selectedoudiv});
     } 

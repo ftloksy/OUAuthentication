@@ -70,6 +70,8 @@ class OuLogin extends Component {
                         unassign: data.unassign,
                         errorMessage: "",
                     })
+                    await this.choiceDivListEmps(null, data.divisions[0]);
+
                 } else {
                     console.log('Error:', response.statusText);
                 }
@@ -112,6 +114,7 @@ class OuLogin extends Component {
                     firstname: data.firstname,
                     lastname: data.lastname,
                     userrole: data.userrole,
+                    choicedDiv: data.divisions[0],
                     divisions: data.divisions,
                     read: data.read,
                     addnew: data.addnew,
@@ -120,6 +123,8 @@ class OuLogin extends Component {
                     unassign: data.unassign,
                     errorMessage: "",
                 })
+                await this.choiceDivListEmps(null, data.divisions[0]);
+
             } else {
                 console.log("Error Status: ", response.status);
                 const data = await response.json();
@@ -179,7 +184,7 @@ class OuLogin extends Component {
     async choiceDivListEmps(event, dv) {
         console.log("chiceDivListEmp: ", dv);
         if ( this.listEmployees.current ) {
-           await this.listEmployees.current.fetchNames();
+           await this.listEmployees.current.fetchNames(dv);
            await this.listEmployees.current.disableForm();    
            await this.listEmployees.current.updateDivTitle(dv);
         };

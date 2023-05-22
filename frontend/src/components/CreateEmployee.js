@@ -157,7 +157,7 @@ class CreateEmployee extends Component {
       console.log("Error When Create User: ", err);
     })
       
-    this.props.onUpdateEmpList();
+    this.props.onUpdateEmpList(divsGroup[0]);
     this.props.onDisableForm();
   }
 
@@ -230,7 +230,7 @@ class CreateEmployee extends Component {
               </>
               }
             </div>
-              <UserRoleSelecter urid={userRole._id} onSelect={(ur) => this.setUserRole(ur)} />
+              <UserRoleSelecter urid={userRole} onSelect={(ur) => this.setUserRole(ur)} />
             <hr/>
           </>)
           : (<></>) }

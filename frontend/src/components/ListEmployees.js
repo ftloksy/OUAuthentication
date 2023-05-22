@@ -27,21 +27,20 @@ class ListEmployees extends Component {
       unassign: localStorage.getItem("can_unassign")
     }
 
-    this.fetchNames();
   };
 
-  // componentDidMount() {
-  //   this.fetchNames();
-  // }
+  componentDidMount() {
+     this.fetchNames(this.props.choiceddiv);
+  }
 
-  async fetchNames() {
+  async fetchNames(choicedDivId) {
 
     const token = localStorage.getItem('token');
     if ( token ) {
         console.log("Storaged Token: ", token);
 
         try {
-            const response = await fetch("/login/getemps/" + this.props.choiceddiv, {
+            const response = await fetch("/login/getemps/" + choicedDivId, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -49,10 +48,11 @@ class ListEmployees extends Component {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('List emps Data: ', data);
+                console.log('List emps Data in ListEmployees: ', data);
                 await this.setState( { emps: data })
             } else {
-                console.log('Error:', response.statusText);
+                console.log('Fetch Names ListEmployees Error:', response.statusText);
+                console.log('Fetch Names ListEmployees Choiced Emp:', choicedDivId);
             }
         } catch (err) {
             console.log("Error : ", err.message);
@@ -90,7 +90,13 @@ class ListEmployees extends Component {
         <li>Email: {emp.email}</li>
         <li>Address: {emp.address}</li>
         <li>Telephone: {emp.telephone}</li>
-        
+        <li>User Role: {emp.userrole.role}</li>
+        {emp.oudivs.map(ou => (
+          <li>Org Units: {ou.orgunits.name} / Divisions: {ou.divisions.name} </li>
+        ))}
+        {emp.divs.map(dv => (
+          <li>Divisions: {dv.name} </li>
+        ))}
         <hr/>
       </ul>
     )
@@ -106,7 +112,7 @@ class ListEmployees extends Component {
             <>
                 {displayForm
                 ? ( <CreateEmployee 
-                      onUpdateEmpList={this.fetchNames} 
+                      onUpdateEmpList={(choicedDiv) => this.fetchNames(choicedDiv)} 
                       empId={empId} onDisableForm={this.disableForm} /> )
                 : ( 
                     <>
