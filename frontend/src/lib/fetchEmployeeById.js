@@ -73,7 +73,7 @@ class fetchEmployeeById {
                     this.employeeObj = {
                       orgUnitDivsGroup: data.oudivs ,
                       divsGroup: data.divs,
-                      userRole: data.userrole,
+                      userRole: data.userrole._id,
                       employeesInfo: {
                         firstname: data.firstname,
                         lastname:  data.lastname,

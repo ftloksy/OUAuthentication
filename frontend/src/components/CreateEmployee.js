@@ -168,10 +168,22 @@ class CreateEmployee extends Component {
 
       return (
         <>
-          {this.fetchEmp.getHello()}
-          <hr/>
-          {this.fetchEmp.listEmployeeInfo()}
-          <hr/>
+          <ul>
+            <li>Name: {employeesInfo.firstname}, {employeesInfo.lastname}</li>
+            <li>Email: {employeesInfo.email}</li>
+            <li>Address: {employeesInfo.address}</li>
+            <li>Telephone: {employeesInfo.telephone}</li>
+            {/* <li>Loginname: {employeesInfo.loginname}</li>
+            <li>Lastname: {employeesInfo.lastname}</li>
+            <li>password: {employeesInfo.password}</li>
+            <li>user role: {userRole}</li>
+            {orgUnitDivsGroup.map(ous => (
+              <li>Org Units Divisions: <OuDivName oudivid={ous} /></li>
+            ))}
+            {divsGroup.map(dvs => (
+              <li>Divisions: <DivName divid={dvs} /></li>
+            ))} */}
+          </ul>
 
           {errorMessage
           ? (<h2>{errorMessage}</h2>)
@@ -218,7 +230,7 @@ class CreateEmployee extends Component {
               </>
               }
             </div>
-            <UserRoleSelecter urid={userRole._id} onSelect={(ur) => this.setUserRole(ur)} />
+              <UserRoleSelecter urid={userRole._id} onSelect={(ur) => this.setUserRole(ur)} />
             <hr/>
           </>)
           : (<></>) }

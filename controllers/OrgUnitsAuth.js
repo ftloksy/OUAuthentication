@@ -58,6 +58,7 @@ class  OrgUnitsAuth {
             res.json({
               msg: "Login Success!",
               token: loginToken,
+              id: userObj._id,
               firstname: userObj.firstname,
               lastname: userObj.lastname,
               userrole: userObj.userrole.role,
@@ -89,6 +90,7 @@ class  OrgUnitsAuth {
         req.token = token;
         req.decoded = decoded;
         req.foundObj = {
+          id: decoded.id,
           firstname: decoded.firstname,
           lastname: decoded.lastname,
           userrole: decoded.userrole,

@@ -16,11 +16,12 @@ class OuLogin extends Component {
             password: "",
             token: "",
             logined: false,
-            selectedDiv: false,
+            // selectedDiv: false,
             choicedDiv: "",
             firstname: "",
             lastname: "",
             userrole: "",
+            selfEmpId: "",
             read: false,
             addnew: false,
             update: false,
@@ -33,6 +34,8 @@ class OuLogin extends Component {
         this.handleInputSubmit = this.handleInputSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.logoutAndForgetToken = this.logoutAndForgetToken.bind(this);
+        this.choiceDivListEmps = this.choiceDivListEmps.bind(this);
+        this.updateSelfRegistrationInfo = this.updateSelfRegistrationInfo.bind(this);
 
         this.listEmployees = React.createRef();
     };
@@ -57,7 +60,9 @@ class OuLogin extends Component {
                         firstname: data.firstname,
                         lastname: data.lastname,
                         userrole: data.userrole,
+                        selfEmpId: data.id,
                         divisions: data.divisions,
+                        choicedDiv: data.divisions[0],
                         read: data.read,
                         addnew: data.addnew,
                         update: data.update,
@@ -103,6 +108,7 @@ class OuLogin extends Component {
                 await this.setState({
                     logined: true,
                     token: data.token,
+                    selfEmpId: data.id,
                     firstname: data.firstname,
                     lastname: data.lastname,
                     userrole: data.userrole,
@@ -153,6 +159,7 @@ class OuLogin extends Component {
         localStorage.removeItem("can_unassign");
         await this.setState({
             logined: false,
+            selfEmpId: "",
             login: "",
             password: "",
             token: "",
@@ -182,8 +189,14 @@ class OuLogin extends Component {
         })
     }
 
+    async updateSelfRegistrationInfo(event, empId) {
+        if ( this.listEmployees.current ) {
+           await this.listEmployees.current.updateSelfRegistration(empId);
+        };
+    }
+
     render() {
-        const { login, password, userrole, divisions, selectedDiv,
+        const { login, password, userrole, divisions, selectedDiv, selfEmpId,
             choicedDiv, firstname, lastname, logined, errorMessage } = this.state;
 
         return (
@@ -197,6 +210,9 @@ class OuLogin extends Component {
                     <h1>Welcome: {firstname}, {lastname} ( {userrole} )</h1>
                     <button onClick={this.logoutAndForgetToken}>Logout</button>
                     <hr/>
+                    <h2>Update Your Self Registration Info.</h2>
+                    <button onClick={(event) => this.updateSelfRegistrationInfo(event, selfEmpId)}>Update</button>
+                    <hr/>
                     <h2>Divisions:</h2>
                     <ul>
                         {divisions.map(dv => (
@@ -207,10 +223,10 @@ class OuLogin extends Component {
                             </li>
                         ))}
                     </ul>
-                    {selectedDiv
-                     ? ( <ListEmployees choiceddiv={choicedDiv} ref={this.listEmployees} /> )
-                     : (<></>)
-                    }
+                    <ListEmployees 
+                        selfempid={selfEmpId}
+                        choiceddiv={choicedDiv}
+                        ref={this.listEmployees} />
                 </>)
             : ( <form onSubmit={(event) => this.handleInputSubmit(event)}>
                     <h2>Login</h2>
