@@ -55,12 +55,12 @@ class OuDivSelecter extends Component {
           throw Error(response.statusText);
         }
         response.json().then(async divisions => {
-          let divisionsPool = [];
+          let divisionsPool = [{ id: "", div: { name: "" }}];
           divisions.forEach((ouDiv) => {
             divisionsPool.push( { id: ouDiv._id, div: ouDiv.divisions } );
           })
           await this.setState({divisionsPool});
-          console.log(divisionsPool);
+          console.log("OuDivSelecter handleInputChange: ", divisionsPool);
         })
       })
     } else if ( name === "ou" && !value ) {

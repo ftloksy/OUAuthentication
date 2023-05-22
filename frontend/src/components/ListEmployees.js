@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CreateEmployee from './CreateEmployee';
 import DivName from './DivName';
+import '../css/ListEmployees.css';
 
 class ListEmployees extends Component {
   constructor(props) {
@@ -34,32 +35,40 @@ class ListEmployees extends Component {
   }
 
   async fetchNames(choicedDivId) {
+      
+    this.fetchTimeout = setTimeout(async () => {
 
-    const token = localStorage.getItem('token');
-    if ( token ) {
-        console.log("Storaged Token: ", token);
-
-        try {
-            const response = await fetch("/login/getemps/" + choicedDivId, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+        const token = localStorage.getItem('token');
+        if ( token ) {
+            console.log("Storaged Token: ", token);
+    
+            try {
+                const response = await fetch("/login/getemps/" + choicedDivId, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('List emps Data in ListEmployees: ', data);
+                    await this.setState( { emps: data })
+                } else {
+                    console.log('Fetch Names ListEmployees Error:', response.statusText);
+                    console.log('Fetch Names ListEmployees Choiced Emp:', choicedDivId);
                 }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('List emps Data in ListEmployees: ', data);
-                await this.setState( { emps: data })
-            } else {
-                console.log('Fetch Names ListEmployees Error:', response.statusText);
-                console.log('Fetch Names ListEmployees Choiced Emp:', choicedDivId);
+            } catch (err) {
+                console.log("Error : ", err.message);
             }
-        } catch (err) {
-            console.log("Error : ", err.message);
+        } else {
+            console.log("Don't has any token.");
         }
-    } else {
-        console.log("Don't has any token.");
-    }
+    }, 2000);
+
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.fetchTimeout);
   }
 
   async handleButtonClick(event, empId) {
@@ -85,8 +94,13 @@ class ListEmployees extends Component {
   }
 
   showEmployeeInfo (emp) {
+    let highLight = "unhighLight";
+    if ( emp._id === this.state.empId ) {
+      highLight = "highLight";
+    }
+
     return (
-      <ul>
+      <ul className={highLight}>
         <li>Email: {emp.email}</li>
         <li>Address: {emp.address}</li>
         <li>Telephone: {emp.telephone}</li>
