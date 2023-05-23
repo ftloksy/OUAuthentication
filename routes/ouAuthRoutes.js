@@ -33,7 +33,8 @@ router.post('/updateemp/:empid', ouAuth.chkToken(),
 
 // Company account infomation, access it need the token.
 router.get('/finduserbyid/:empid', ouAuth.chkToken(), ouAuth.findUserById(), ouAuth.sendObj());
-router.get('/getadmindiv', ouAuth.chkToken(), ouAuth.getAdminDivs(), ouAuth.sendObj());
+router.get('/getadmindivs', ouAuth.chkToken(), ouAuth.getAdminDivs(), ouAuth.sendObj());
+router.get('/getdivs', ouAuth.chkToken(), ouAuth.getDivs(), ouAuth.sendObj());
 router.get('/getemps/:divid', ouAuth.chkToken(), ouAuth.getEmployees(), ouAuth.sendObj());
 
 // Company Structure info, don't care token.

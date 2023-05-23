@@ -21,7 +21,7 @@ class DivSelecter extends Component {
     if ( token ) {
       console.log("Storaged Token: ", token);
 
-      fetch('/login/getadmindiv', {
+      fetch('/login/getdivs', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -68,7 +68,7 @@ class DivSelecter extends Component {
           <select name="dv"
             id="division" onChange={this.handleInputChange}>
             {divisionsPool.map(dv => (
-              <option value={dv}><DivName divid={dv} /></option>
+              <option value={dv._id}><DivName divid={dv._id} /></option>
             ))}
           </select>
           <input type="submit" value="Submit" />

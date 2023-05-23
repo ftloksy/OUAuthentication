@@ -219,6 +219,19 @@ class  OrgUnitsAuth {
     }
   }
 
+  getDivs() {
+    return (req, res, next) => {
+      Divisions.find()
+      .then((div, err) => {
+        req.foundObj = div;
+        console.log("Found Div: ");
+        console.log(req.foundObj);
+        req.err = err;
+        next();
+      });
+    }
+  }
+
   getOrgUnits() {
     return (req, res, next) => {
       OrgUnits.find()
