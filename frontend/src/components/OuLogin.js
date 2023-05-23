@@ -197,6 +197,7 @@ class OuLogin extends Component {
     async updateSelfRegistrationInfo(event, empId) {
         if ( this.listEmployees.current ) {
            await this.listEmployees.current.updateSelfRegistration(empId);
+           await this.listEmployees.current.enableForm();
         };
     }
 

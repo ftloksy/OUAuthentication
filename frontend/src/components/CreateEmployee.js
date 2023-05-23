@@ -99,7 +99,11 @@ class CreateEmployee extends Component {
     let jsonEmpObj = '';
 
     if (empId) {
-      url = '/login/reguser/' + empId;
+      if (this.userRight.assign === "true" || this.userRight.unassign === "true") {
+        url = '/login/reguser/' + empId;
+      } else {
+        url = '/login/updateemp/' + empId;
+      }
       const createEmpObj = {
         userrole: userRole,
         divs: divsGroup,
@@ -150,6 +154,9 @@ class CreateEmployee extends Component {
       };
 
       response.json().then( data => {
+        if (!empId) {
+          this.props.onUpdateEmpId(data.id);
+        }
         console.log('Update or Create Data: ', data);
       });
 

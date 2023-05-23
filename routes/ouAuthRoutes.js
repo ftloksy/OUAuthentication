@@ -11,7 +11,7 @@ const ouAuth = new OrgUnitsAuth(dbConnect);
 
 // router.post('/test', ouAuth.testLogin());
 // router.get('/finduser/:uid', ouAuth.chkToken(), ouAuth.findUser(), ouAuth.sendObj());
-// router.get('/hasright/:uid', ouAuth.chkToken(), ouAuth.hasRight('hello'), ouAuth.sendObj());
+router.get('/hasright/:uid', ouAuth.chkToken(), ouAuth.hasAdminRight(), ouAuth.sendObj());
 
 // User login. every user before login, don't care token.
 router.post('/auth', ouAuth.loginAuth());
@@ -20,14 +20,16 @@ router.post('/auth', ouAuth.loginAuth());
 router.get('/checktoken', ouAuth.chkToken(), ouAuth.sendObj());
 
 // Need the admin right to createuser. ( assign and unassign )
-router.post('/createuser', ouAuth.chkToken(), ouAuth.createUser(), ouAuth.sendObj());
+router.post('/createuser', ouAuth.chkToken(), 
+  ouAuth.hasAdminRight(), ouAuth.createUser(), ouAuth.sendObj());
 
 // Full user infomation update need admin right. ( assign and unassign )
-router.post('/reguser/:uid', ouAuth.chkToken(), ouAuth.regUser(), ouAuth.sendObj());
+router.post('/reguser/:uid', ouAuth.chkToken(), 
+  ouAuth.hasAdminRight(), ouAuth.regUser(), ouAuth.sendObj());
 
 // Need create a route for update account, but cann't change the user roles.
-//
-//
+router.post('/updateemp/:empid', ouAuth.chkToken(), 
+  ouAuth.hasIsSelfOrManage(), ouAuth.updateEmployee(), ouAuth.sendObj());
 
 // Company account infomation, access it need the token.
 router.get('/finduserbyid/:empid', ouAuth.chkToken(), ouAuth.findUserById(), ouAuth.sendObj());

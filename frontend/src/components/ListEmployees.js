@@ -11,12 +11,14 @@ class ListEmployees extends Component {
         empId: "",
         displayForm: false,
     };
+    this.enableForm = this.enableForm.bind(this);
     this.disableForm = this.disableForm.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
     this.fetchNames = this.fetchNames.bind(this);
     this.showEmployeeInfo = this.showEmployeeInfo.bind(this);
     this.updateDivTitle = this.updateDivTitle.bind(this);
     this.updateSelfRegistration = this.updateSelfRegistration.bind(this);
+    // this.setEmpId = this.setEmpId.bind(this);
 
     this.divName = React.createRef();
 
@@ -73,18 +75,27 @@ class ListEmployees extends Component {
 
   async handleButtonClick(event, empId) {
     event.preventDefault();
-    console.log("Employees Id: ", empId);
-    await this.setState({
-        empId, displayForm: true});
+    await this.updateSelfRegistration(empId);
+    await this.enableForm();
   }
+
+  // async setEmpId(empId) {
+  //   console.log("Employees Id: ", empId);
+  //   await this.setState({
+  //     empId, displayForm: true});
+  // }
 
   async disableForm() {
     await this.setState({displayForm: false})
   }
 
+  async enableForm() {
+    await this.setState({displayForm: true})
+  }
+
   async updateSelfRegistration(empId) {
-    await this.setState({
-        empId, displayForm: true});
+    console.log("I am in updateSelfRegistration function.")
+    await this.setState({ empId });
   }
 
   async updateDivTitle(urlEndPart) {
@@ -126,6 +137,7 @@ class ListEmployees extends Component {
             <>
                 {displayForm
                 ? ( <CreateEmployee 
+                      onUpdateEmpId={(empId) => this.updateSelfRegistration(empId)}
                       onUpdateEmpList={(choicedDiv) => this.fetchNames(choicedDiv)} 
                       empId={empId} onDisableForm={this.disableForm} /> )
                 : ( 

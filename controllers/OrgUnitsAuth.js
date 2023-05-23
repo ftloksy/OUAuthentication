@@ -15,14 +15,6 @@ class  OrgUnitsAuth {
     this.secretKey = process.env.SECRET_KEY ;
   }
 
-  testLogin() {
-    return (req, res) => {
-      const login = req.body.login;
-      const passwd = req.body.password;
-
-      res.json({msg: 'Welcome!! ' + login + ': ' + passwd});
-    }
-  }
 
   loginAuth() {
     return (req, res) => {
@@ -35,9 +27,6 @@ class  OrgUnitsAuth {
       .populate('userrole')
       .then((userObj) => {
         if (userObj) {
-          console.log("Login: ");
-          console.log(userObj);
-          console.log(userObj.loginname);
           if (userObj.loginname === login && userObj.password === passwd ) {
             const loginToken = jwt.sign(
               {
@@ -82,9 +71,7 @@ class  OrgUnitsAuth {
   chkToken(){
     return (req, res, next) => {
       const token = req.header('Authorization').split(' ')[1];
-      console.log("Auth Header: ", req.header('Authorization').split(' ')[1]);
-      console.log("Express Token: ");
-      console.log(token);
+
       try {
         const decoded = jwt.verify(token, this.secretKey)
         req.token = token;
@@ -108,39 +95,11 @@ class  OrgUnitsAuth {
     }
   }
 
-  helloWorld() {
-    return (req, res) => {
-      res.json({msg: "Hello !" + req.params.uid });
-    }
-  }
-
-  findUser() {
-    return (req, res, next) => {
-      const userObj = req.decoded;
-      Employees.findById(userObj.id)
-      .then((emp, err) => {
-        req.err = err;
-        req.foundObj = emp;
-        next();
-      })
-    }
-  }
-
   createUser() {
     return async (req, res, next) => {
-      console.log("Firstname: ", req.body.firstname);
-      console.log("Lastname: ", req.body.lastname);
-      console.log("Address: ", req.body.address);
-      console.log("Telephone: ", req.body.telephone);
-      console.log("Email: ", req.body.email);
-      console.log("Loginname: ", req.body.loginname);
-      console.log("Password: ", req.body.password);
-      console.log("Userrole: ", req.body.userrole);
-      console.log("Divisions: ", req.body.divs);
-      console.log("Org Units - Divisions: ", req.body.oudivs);
-
+      const genId = new mongoose.Types.ObjectId();
       const record = new Employees({
-        _id: new mongoose.Types.ObjectId(),
+        _id: genId,
         userrole: req.body.userrole,
         divs: req.body.divs,
         oudivs: req.body.oudivs,
@@ -154,48 +113,40 @@ class  OrgUnitsAuth {
       });
       
       await record.save();
-      res.json({msg: "Record Saved."})
-
-      // const obj = await record.save();
-      // console.log("Create User Obj: ", obj);
-      // const returnObj = {
-      //   firstname: obj.firstname,
-      //   lastname: obj.lastname,
-      //   email: obj.email,
-      //   telephone: obj.telephone,
-      //   address: obj.address,
-      //   loginname: obj.loginname,
-      // }
-      
-      // try {
-      //     const parsedData = JSON.parse(returnObj);
-      //     console.log('JSON data is valid:', parsedData);
-      //   } catch (error) {
-      //     console.error('Invalid JSON data:', error);
-      //   }
-
-      // res.foundObj = obj;
-      // next();
-
+      res.json({
+        msg: "Record Saved.",
+        id: genId.toString()
+      })
     }
   }
 
-  // This need to follow development.
-  hasRight(action) {
+  hasAdminRight() {
     return (req, res, next) => {
       const userObj = req.decoded;
-      console.log("ID in Has Right. :");
-      console.log(userObj.id);
-      console.log("Request in ID :");
-      console.log(req.params.uid );
       Employees.findById(userObj.id)
       .populate('userrole')
       .then((emp, err) => {
-        console.log("Has Right HERE.");
-        console.log(emp);
-        req.err = err;
-        res.foundObj = emp;
-        if (action === 'hello') {
+
+        if (emp.userrole.assign && emp.userrole.unassign) {
+          req.foundObj = { msg: "You are admin." }
+          next();
+        } else {
+          res.status(405)
+          .json({righterror: "You haven't enought right to do this"});
+        }
+      });
+    }
+  }
+  
+  hasIsSelfOrManage() {
+    return (req, res, next) => {
+      const userObj = req.decoded;
+      Employees.findById(userObj.id)
+      .populate('userrole')
+      .then((emp, err) => {
+        
+        if (( emp.userrole.addnew && userObj.id === req.params.empid ) || emp.userrole.update) {
+          req.foundObj = { msg: "You have right." }
           next();
         } else {
           res.status(405)
@@ -205,11 +156,31 @@ class  OrgUnitsAuth {
     }
   }
 
+  updateEmployee() {
+    return (req, res, next) => {
+      const updateObj = {
+        password: req.body.password,
+        email: req.body.email,
+        telephone: req.body.telephone,
+        address: req.body.address,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname
+      };
+
+      console.log(" UpdateEmployee: ", updateObj);
+
+      Employees.findByIdAndUpdate(req.params.empid, updateObj)
+      .then((emp, err) => {
+        req.err = err;
+        console.log("UpdateEmployee Have Error: ", err);
+        req.foundObj = emp;
+        next();
+      })
+    }
+  }
+
   regUser() {
     return (req, res, next) => {
-      //const userObj = req.decoded;
-      //console.log("User id in regUser: ");
-      //console.log(userObj.id);
       Employees.findByIdAndUpdate(req.params.uid, req.body)
       .then((emp, err) => {
         req.err = err;
@@ -233,8 +204,6 @@ class  OrgUnitsAuth {
       .populate('orgunits')
       .populate('divisions')
       .then((oudiv, err) => {
-        console.log("OUID in getOrgDiv: ");
-        console.log(oudiv);
         req.err = err;
         req.foundObj = oudiv;
         next();
@@ -255,8 +224,6 @@ class  OrgUnitsAuth {
       OrgUnits.find()
       .then((div, err) => {
         req.foundObj = div;
-        console.log("Found Div: ");
-        console.log(req.foundObj);
         req.err = err;
         next();
       });
@@ -268,8 +235,6 @@ class  OrgUnitsAuth {
       UserRoles.find()
       .then((ur, err) => {
         req.foundObj = ur;
-        console.log("Found UserRole: ");
-        console.log(req.foundObj);
         req.err = err;
         next();
       });
@@ -326,7 +291,6 @@ class  OrgUnitsAuth {
         }
       })
       .then((emp, err) => {
-        console.log("Emps List: ", emp)
         req.err = err;
         req.foundObj = emp;
         next();

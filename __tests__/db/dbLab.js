@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { Employees,  OrgUnitsDivisions } from '../../models/OrgUnits.js';
 import DbConnect from '../../database/DbConnect.js';
+import pkg from 'bson-objectid';
+const { ObjectID } = pkg;
 
 const dbConnect = new DbConnect();
 
@@ -21,6 +23,27 @@ describe('DbTest', () => {
     done();
   })
 })
+
+describe('ObjectIdTest', () => {
+
+  it('ObjectId Db', async (done) => {
+    const obid = new mongoose.Types.ObjectId('646bd618294ccbc108491135');
+    console.log("ObjectId: ", obid.toString());
+
+    done();
+
+  })
+})
+
+describe('simple javascript for ObjectId Test', () => {
+
+  it('bson ObjectId test', (done) => {
+    //const id = ObjectID();
+    console.log("BSON: ", ObjectID );
+    done();
+  })
+})
+
 
 after(() => {
   dbConnect.closeDbConnection();
