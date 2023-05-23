@@ -1,5 +1,6 @@
 /**
  * this is the test_suit for this package.
+ * for test login auth.
  */
 import chai from 'chai';
 import chaiHttp from 'chai-http';

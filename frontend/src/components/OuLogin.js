@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import { MD5 } from 'crypto-js';
 import ListEmployees from './ListEmployees';
 import DivName from './DivName';
+import FetchDivisions from '../lib/FetchDivisions';
 
 class OuLogin extends Component {
     constructor(props) {
@@ -16,7 +17,6 @@ class OuLogin extends Component {
             password: "",
             token: "",
             logined: false,
-            // selectedDiv: false,
             choicedDiv: "",
             firstname: "",
             lastname: "",
@@ -28,6 +28,7 @@ class OuLogin extends Component {
             assign: false,
             unassign: false,
             divisions: [],
+            allDivisions: [],
             errorMessage: "",
         };
         this.storageToken = this.storageToken.bind(this);
@@ -38,8 +39,10 @@ class OuLogin extends Component {
         this.updateSelfRegistrationInfo = this.updateSelfRegistrationInfo.bind(this);
 
         this.listEmployees = React.createRef();
+
     };
 
+    /* when mount that components, check storaged token */
     async componentDidMount() {
         const token = localStorage.getItem('token');
         if ( token ) {
@@ -83,8 +86,21 @@ class OuLogin extends Component {
         } else {
             console.log("Don't has any record.");
         }
+
     }
 
+    /* when user is Admin, fetch all Divisions */
+    async fetchDivs() {
+        const divsPool = new FetchDivisions();
+        const allDivisions = await divsPool.fetch();
+
+        await this.setState({ allDivisions });
+    }
+
+    /**
+     * User input password and login name to auth
+     * If auth success, storage the token in localstorage.
+     */
     async storageToken(login, password) {
         console.log("login: " + login);
         console.log("Password: " + password);
@@ -128,7 +144,6 @@ class OuLogin extends Component {
             } else {
                 console.log("Error Status: ", response.status);
                 const data = await response.json();
-                console.log("Error Message: ", data.msg);
                 await this.setState({
                     errorMessage: data.msg
                 })
@@ -136,8 +151,11 @@ class OuLogin extends Component {
         } catch (err) {
             console.log("Error: ", err.message);
         }
+
+        await this.fetchDivs();
     }
 
+    // enter password and login, and check token / storage token.
     async handleInputSubmit(event) {
         event.preventDefault();
         const { login, password } = this.state;
@@ -154,6 +172,7 @@ class OuLogin extends Component {
         }
     }
 
+    // If the use logout, clear the localstorage and state
     async logoutAndForgetToken(event){
         event.preventDefault();
         localStorage.removeItem("token");
@@ -181,6 +200,13 @@ class OuLogin extends Component {
         })
     }
 
+    /**
+     * When the web client click the divisions buttons list.
+     * Will target this function. and update the child component ListEmployees
+     * refetch the display division's employees list.
+     * and close the update and create employee form.
+     * and update the divisions label's label.
+     */
     async choiceDivListEmps(event, dv) {
         console.log("chiceDivListEmp: ", dv);
         if ( this.listEmployees.current ) {
@@ -189,11 +215,11 @@ class OuLogin extends Component {
            await this.listEmployees.current.updateDivTitle(dv);
         };
         await this.setState({
-            selectedDiv: true,
             choicedDiv: dv
         })
     }
 
+    // When use click the profile update button, will enable the update form in ListEmployees.
     async updateSelfRegistrationInfo(event, empId) {
         if ( this.listEmployees.current ) {
            await this.listEmployees.current.updateSelfRegistration(empId);
@@ -202,7 +228,8 @@ class OuLogin extends Component {
     }
 
     render() {
-        const { login, password, userrole, divisions, selectedDiv, selfEmpId,
+        const { login, password, userrole, divisions, 
+            selfEmpId, assign, unassign, allDivisions,
             choicedDiv, firstname, lastname, logined, errorMessage } = this.state;
 
         return (
@@ -220,7 +247,17 @@ class OuLogin extends Component {
                     <button onClick={(event) => this.updateSelfRegistrationInfo(event, selfEmpId)}>Update</button>
                     <hr/>
                     <h2>Divisions:</h2>
-                    <ul>
+                    { assign || unassign
+                    ? (<ul>
+                        {allDivisions.map(dv => (
+                            <li>
+                                <button onClick={event => this.choiceDivListEmps(event, dv._id)}>
+                                    <DivName divid={dv._id} />
+                                </button>
+                            </li>
+                        ))}
+                    </ul>)
+                    : (<ul>
                         {divisions.map(dv => (
                             <li>
                                 <button onClick={event => this.choiceDivListEmps(event, dv)}>
@@ -228,7 +265,7 @@ class OuLogin extends Component {
                                 </button>
                             </li>
                         ))}
-                    </ul>
+                    </ul>) }
                     <ListEmployees 
                         selfempid={selfEmpId}
                         choiceddiv={choicedDiv}

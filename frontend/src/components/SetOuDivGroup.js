@@ -1,3 +1,12 @@
+/**
+ * It is a React component that allows users to select organization units (OUs)
+ * and divisions and add them to a group. 
+ * The component first fetches a list of OUs and divisions from the server. 
+ * When the user selects an OU or division, the component adds it to the group. 
+ * The component also allows users to delete OUs and divisions from the group. 
+ * When the user clicks the "Confirm" button, 
+ * the component passes the selected OUs and divisions to the parent component.
+ */
 import React, { Component } from 'react';
 import OuDivSelecter from './OuDivSelecter';
 import OuDivName from './OuDivName';
@@ -15,8 +24,6 @@ class SetOuDivGroup extends Component {
 
   componentDidMount() {
     if ( this.props.selectedoudiv ) {
-      console.log("Set Ou Div Group:")
-      console.log( this.props.selectedoudiv );
       this.setState({orgUnitsDivChoice: this.props.selectedoudiv});
     } 
   }
@@ -34,15 +41,15 @@ class SetOuDivGroup extends Component {
     event.preventDefault();
     let tmpOrgUnitsDivChoice = this.state.orgUnitsDivChoice;
     let oudivIndex = tmpOrgUnitsDivChoice.indexOf(oudiv);
-    if (oudivIndex != -1) {
+    if (oudivIndex !== -1) {
       tmpOrgUnitsDivChoice.splice(oudivIndex, 1);
     }
     this.setState({orgUnitsDivChoice: tmpOrgUnitsDivChoice})
   }
 
+  // pass selected orgUnitsDiv choice to parent.
   setOuDivGroup(){
     this.props.onSetDivGroup(this.state.orgUnitsDivChoice);
-    console.log("In Set Ou Div Group.");
   }
 
   render() {

@@ -1,3 +1,12 @@
+/**
+ * It is a React component that allows users 
+ * to select an organization unit (OU) and a division. 
+ * The component first fetches a list of OUs from the server. 
+ * When the user selects an OU, the component fetches 
+ * a list of divisions for that OU. 
+ * The user can then select a division. When the user submits the form, 
+ * the component passes the selected OU and division to the parent component.
+ */
 import React, { Component } from 'react';
 
 class OuDivSelecter extends Component {
@@ -37,9 +46,6 @@ class OuDivSelecter extends Component {
     event.preventDefault();
     const { choiceOuDiv } = this.state;
     console.log( "Choice Org Units & Divisions: ", choiceOuDiv );
-    //const { name, id, value } = event.target;
-    //this.setState( { })
-    //console.log(event);
     this.props.onSubmit( choiceOuDiv);
   }
 

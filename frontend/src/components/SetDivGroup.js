@@ -1,3 +1,13 @@
+/**
+ * It is a React component that allows users 
+ * to select divisions and add them to a group. 
+ * The component first fetches a list of divisions from the server. 
+ * When the user selects a division, 
+ * the component adds it to the group. 
+ * The component also allows users to delete divisions from the group. 
+ * When the user clicks the "Confirm" button, 
+ * the component passes the selected divisions to the parent component.
+ */
 import React, { Component } from 'react';
 import DivSelecter from './DivSelecter';
 import DivName from './DivName';
@@ -13,16 +23,14 @@ class SetDivGroup extends Component {
     this.setDivGroup = this.setDivGroup.bind(this);
   };
 
+  // Show the selected ou and div form parent component.
   componentDidMount() {
     if ( this.props.selectedoudiv ) {
-      console.log( this.props.selectedoudiv );
       this.setState({divChoice: this.props.selectedoudiv});
     } 
   }
 
   getDivisions(dv) {
-    console.log("Dv in SetDivGroup: ");
-    console.log(dv);
     let tmpDivChoice = this.state.divChoice ;
     if ( tmpDivChoice.indexOf(dv) === -1 ) {
       tmpDivChoice.push(dv);
@@ -42,7 +50,6 @@ class SetDivGroup extends Component {
 
   setDivGroup(){
     this.props.onSetDivGroup(this.state.divChoice);
-    console.log("In Set Ou Div Group.");
   }
 
   render() {

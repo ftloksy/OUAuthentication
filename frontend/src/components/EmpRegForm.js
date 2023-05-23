@@ -1,3 +1,12 @@
+/**
+ * It is a React component 
+ * that renders a form for registering employees. 
+ * The form has seven fields: login name, password, email, 
+ * telephone, address, first name, and last name. 
+ * When the user submits the form, 
+ * the component calls the onSelect() method of its parent component, 
+ * passing in the values of the form fields.
+ */
 import React, { Component } from 'react';
 
 class EmpRegForm extends Component {
@@ -24,10 +33,6 @@ class EmpRegForm extends Component {
     }
 
     render() {
-
-        // const {
-        //     loginname, password, email,
-        //     telephone, address, firstname, lastname } = this.state;
 
         const { empinfo } = this.props;
         

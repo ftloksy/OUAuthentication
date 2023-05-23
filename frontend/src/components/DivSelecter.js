@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import DivName from './DivName';
+import FetchDivisons from '../lib/FetchDivisions';
 
+/**
+ * It is responsible for rendering a form 
+ * with a select dropdown menu to choose a division from a list.
+ */
 class DivSelecter extends Component {
   constructor(props) {
     super(props);
@@ -10,6 +15,8 @@ class DivSelecter extends Component {
     };
     this.handleInputSubmit = this.handleInputSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    
+    this.divsPool = new FetchDivisons();
   };
 
   componentDidMount() {
@@ -17,35 +24,21 @@ class DivSelecter extends Component {
   }
 
   async fetchDiv() {
-    const token = localStorage.getItem('token');
-    if ( token ) {
-      console.log("Storaged Token: ", token);
+    
+    // fetch all Divisions record at database.
+    const divs = await this.divsPool.fetch();
 
-      fetch('/login/getdivs', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      .then(response => {
-        if (!response.ok){
-          throw Error(response.statusText);
-        }
-        response.json().then( divs => {
-          let divisionsPool = [""];
-          divs.forEach( dv => {
-            divisionsPool.push(dv);
-          })
-          this.setState( { divisionsPool: divisionsPool } );
-          console.log( divisionsPool );
-        })
-      })
-
-    } else {
-      console.log("Don't has any record.");
-    }
+    let divisionsPool = [""];
+    divs.forEach( dv => {
+      divisionsPool.push(dv);
+    })
+    this.setState( { divisionsPool } );
   }
 
+  /**
+   * When web client click submit button.
+   * will pass the client choice to parent components.
+   */ 
   handleInputSubmit(event) {
     event.preventDefault();
     this.props.onSubmit(this.state.choiceDiv);
@@ -54,7 +47,7 @@ class DivSelecter extends Component {
 
   handleInputChange(event) {
     event.preventDefault();
-    const { name, id, value } = event.target;
+    const { name, value } = event.target;
     if ( name === "dv" && value ) {
       this.setState({choiceDiv: value});
     }

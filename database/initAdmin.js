@@ -1,9 +1,14 @@
+// Create a Admin account for this app.
 import mongoose from 'mongoose';
 import md5 from '../helper/MD5.js';
 
 import DbConnect from './DbConnect.js';
 import { UserRoles, Employees } from '../models/OrgUnits.js';
 
+/**
+ *  Create a password hash.
+ * Don't pass clear text password through the internet.
+ */
 const password = md5("root_password");
 
 const dbConnect = new DbConnect();

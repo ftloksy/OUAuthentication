@@ -1,3 +1,5 @@
+// Create MD5 hash for password auth.
+
 import { createHash } from 'node:crypto';
 
 function md5(content) {

@@ -1,3 +1,10 @@
+/**
+ * It is a React component that 
+ * allows users to select a user role. 
+ * The component first fetches a list of user roles 
+ * from the server. When the user selects a user role, 
+ * the component passes the selected user role to the parent component.
+ */
 import React, { Component } from 'react';
 
 class UserRoleSelecter extends Component {
@@ -40,7 +47,7 @@ class UserRoleSelecter extends Component {
 
   handleInputChange(event) {
     event.preventDefault();
-    const { name, id, value } = event.target;
+    const { name, value } = event.target;
     if ( name === "ur" && value ) {
       this.setState({choiceUserRole: value});
     }
@@ -49,7 +56,7 @@ class UserRoleSelecter extends Component {
 
   render() {
     const { urid } = this.props ;
-    const { userRolesPool, choiceUserRole } = this.state ;
+    const { userRolesPool } = this.state ;
     return (
       <>
         <label for="ur"><h2>Choose a User Roles</h2></label>

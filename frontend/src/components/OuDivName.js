@@ -1,3 +1,10 @@
+/**
+ *  It is a React component 
+ * that displays the name of an organization unit (OU) and division. 
+ * The component first fetches the name of the OU and division 
+ * from the server. When the component receives the names, 
+ * it displays them in a span element.
+ */
 import React, { Component } from 'react';
 
 class OuDivName extends Component {
@@ -32,12 +39,6 @@ class OuDivName extends Component {
     .catch( err => {
       console.log("Error: ", err.message);
     })
-    // } else {
-    //   this.setState( {
-    //     ouName: "unknown",
-    //     divName: "unknown"
-    //   })
-    // }
   }
 
   render() {

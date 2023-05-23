@@ -1,3 +1,12 @@
+/**
+ * It is a React component that renders a list of employees. 
+ * The list is fetched from the server using the fetchNames() method. 
+ * The user can update or delete an employee 
+ * by clicking on the corresponding button. 
+ * When the user clicks on the "Create a New Employees" button, 
+ * a new form is opened where the user can enter the employee's information. 
+ * When the user submits the form, the employee is created and added to the list.
+ */
 import React, { Component } from 'react';
 import CreateEmployee from './CreateEmployee';
 import DivName from './DivName';
@@ -7,21 +16,25 @@ class ListEmployees extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-        emps: [],
-        empId: "",
-        displayForm: false,
+        emps: [], // show employees at list.
+        empId: "", // choiced employee to update or delete.
+        deleteMessage: "", // when employee delete will update this msg.
+        displayForm: false, // Display form for update and create employees.
     };
     this.enableForm = this.enableForm.bind(this);
     this.disableForm = this.disableForm.bind(this);
-    this.handleButtonClick = this.handleButtonClick.bind(this);
+    this.handleUpdateButtonClick = this.handleUpdateButtonClick.bind(this);
+    this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
     this.fetchNames = this.fetchNames.bind(this);
     this.showEmployeeInfo = this.showEmployeeInfo.bind(this);
     this.updateDivTitle = this.updateDivTitle.bind(this);
     this.updateSelfRegistration = this.updateSelfRegistration.bind(this);
-    // this.setEmpId = this.setEmpId.bind(this);
+    this.showEmployeeInfo = this.showEmployeeInfo.bind(this);
+    this.deleteEmployee = this.deleteEmployee.bind(this);
 
     this.divName = React.createRef();
 
+    // Read token has the rights.
     this.userRight = {
       read: localStorage.getItem("can_read"),
       addnew: localStorage.getItem("can_addnew"),
@@ -36,6 +49,7 @@ class ListEmployees extends Component {
      this.fetchNames(this.props.choiceddiv);
   }
 
+  // fetch divisions's employees from choicedDivId.
   async fetchNames(choicedDivId) {
       
     this.fetchTimeout = setTimeout(async () => {
@@ -53,11 +67,9 @@ class ListEmployees extends Component {
     
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('List emps Data in ListEmployees: ', data);
                     await this.setState( { emps: data })
                 } else {
                     console.log('Fetch Names ListEmployees Error:', response.statusText);
-                    console.log('Fetch Names ListEmployees Choiced Emp:', choicedDivId);
                 }
             } catch (err) {
                 console.log("Error : ", err.message);
@@ -73,37 +85,66 @@ class ListEmployees extends Component {
     clearTimeout(this.fetchTimeout);
   }
 
-  async handleButtonClick(event, empId) {
+  /**
+   * hit the Update button.
+   * will show the form to update the employee
+   * profile.
+   * 
+   * param   empId :     this is choiced employee's id.
+   */
+  async handleUpdateButtonClick(event, empId) {
     event.preventDefault();
     await this.updateSelfRegistration(empId);
     await this.enableForm();
   }
 
-  // async setEmpId(empId) {
-  //   console.log("Employees Id: ", empId);
-  //   await this.setState({
-  //     empId, displayForm: true});
-  // }
+  // Delete the employee, and update the employees list.
+  async handleDeleteButtonClick(event, empId, loginname) {
+    event.preventDefault();
+    await this.deleteEmployee(empId, loginname);
+    await this.fetchNames(this.props.choiceddiv);
+  }
 
+  // Close the update and create employee form.
   async disableForm() {
     await this.setState({displayForm: false})
   }
 
+  /**
+   * Display the update and create employee form,
+   * and clear the delete the last employee message.
+   */
   async enableForm() {
-    await this.setState({displayForm: true})
+    await this.setState({
+      displayForm: true,
+      deleteMessage: "",
+    });
   }
 
+  /**
+   * When user click the botton to update self profile.
+   * update the state's empId.
+   */
   async updateSelfRegistration(empId) {
-    console.log("I am in updateSelfRegistration function.")
     await this.setState({ empId });
   }
 
+  /**
+   * When user click button to choice another divisions list.
+   * then update the divisions label title. 
+   * 
+   * next time. I don't use components to handle it.
+   */
   async updateDivTitle(urlEndPart) {
     if ( this.divName.current ) {
       await this.divName.current.fetchNames(urlEndPart);
     }
   }
 
+  /**
+   * high light the emp's entry. 
+   * use JSX to show emps's information.
+   */
   showEmployeeInfo (emp) {
     let highLight = "unhighLight";
     if ( emp._id === this.state.empId ) {
@@ -127,9 +168,38 @@ class ListEmployees extends Component {
     )
   }
 
+  // When use click the delete button. will delete employee in database.
+  async deleteEmployee(empId, loginname) {
+    const token = localStorage.getItem('token');
+    if ( token ) {
+        console.log("Storaged Token: ", token);
+
+        try {
+            const response = await fetch("/login/deleteemp/" + empId, {
+              method: 'DELETE',
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+            });
+            
+
+            if (response.ok) {
+                await this.setState({ deleteMessage: loginname + " record has deleted."})
+            } else {
+                console.log('Delete Emp in ListEmployees Error:', response.statusText);
+            }
+        } catch (err) {
+            console.log("Delete Emp in ListEmployees in Try Error : ", err.message);
+        }
+    } else {
+        console.log("Don't has any token.");
+    }
+
+  }
+
   render() {
     
-        const { emps, empId, displayForm } = this.state ;
+        const { emps, empId, displayForm, deleteMessage } = this.state ;
         const { choiceddiv } = this.props;
         const userRight = this.userRight ;
 
@@ -139,9 +209,15 @@ class ListEmployees extends Component {
                 ? ( <CreateEmployee 
                       onUpdateEmpId={(empId) => this.updateSelfRegistration(empId)}
                       onUpdateEmpList={(choicedDiv) => this.fetchNames(choicedDiv)} 
+                      onUpdateDivLabel={(divid) => this.updateDivTitle(divid)}
                       empId={empId} onDisableForm={this.disableForm} /> )
                 : ( 
                     <>
+
+                      {deleteMessage
+                      ? (<h2>{deleteMessage}</h2>)
+                      : (<></>)
+                      }
 
                       <h2><DivName divid={choiceddiv} ref={this.divName}/></h2>
                       <ul>
@@ -149,22 +225,52 @@ class ListEmployees extends Component {
                          <>
                             <li>
                                 {emp.firstname}, {emp.lastname} ( {emp.userrole.role} )
+
+                                {/**  
+                                  * when employees has assign or unassign right show the button 
+                                  * if employees has update right and the emp isn't Admin then show.
+                                  */}
                                 {
                                   userRight.assign === "true" 
                                   || userRight.unassign === "true" 
-                                  || userRight.update === "true"
-                                ? (<button onClick={(event) => this.handleButtonClick(event, emp._id)}>
+                                  || ( userRight.update === "true" && emp.userrole.role !== "Admin" )
+                                ? (
+                                
+                                    <>
+                                    <button onClick={(event) => this.handleUpdateButtonClick(event, emp._id)}>
                                       Update
-                                    </button>)
+                                    </button>
+
+                                  {/* when employees has assign or unassign right show the button  */}
+
+                                    {
+                                      userRight.assign === "true" 
+                                      || userRight.unassign === "true"
+                                    ? (
+                                        <button 
+                                          onClick={
+                                            (event) => this.handleDeleteButtonClick(event, emp._id, emp.loginname)
+                                            }>
+                                          Delete
+                                        </button>
+                                      ) 
+                                    : (<></>)
+                                    }
+
+                                    </>
+                                    
+                                    )
                                 : (<></>)
                                 }
                                 {this.showEmployeeInfo(emp)}
                             </li>
                             </>
                         ))}
+
+                        {/* when employees has assign or unassign right show the button  */}
                         {userRight.assign === "true" || userRight.unassign === "true"
                         ? (<li>
-                            <button onClick={(event) => this.handleButtonClick(event, "")}>
+                            <button onClick={(event) => this.handleUpdateButtonClick(event, "")}>
                               Create a New Employees
                             </button>
                         </li>)

@@ -1,3 +1,12 @@
+/**
+ * It is a React component that renders a form for creating a new employee. 
+ * The form has seven fields: 
+ * login name, password, email, telephone, address, first name, and last name. 
+ * When the user submits the form, 
+ * the component calls the onCreateEmployee method of its parent component, 
+ * passing in the values of the form fields. 
+ * The parent component can then use these values to create a new employee.
+ */
 import React, { Component } from 'react';
 import { MD5 } from 'crypto-js';
 
@@ -92,24 +101,44 @@ class CreateEmployee extends Component {
     const { orgUnitDivsGroup, 
       divsGroup, userRole, employeesInfo }  = this.state ;
       
-    console.log("Submit button click.");
-
-
     let url = ''
-    let jsonEmpObj = '';
+    let body = '';
+    let method = '';
 
+    /**
+     * If haven't empId, it is a create action.
+     * If have that, it is a update action. 
+     */
     if (empId) {
       if (this.userRight.assign === "true" || this.userRight.unassign === "true") {
+
+        /**
+         * this (/login/reguse/) url is just for Admin, 
+         * this endpoint can update and assign the employees.
+         */
         url = '/login/reguser/' + empId;
       } else {
+
+        /**
+         * this (/login/updateemp/) url is for "Normal" and "Management", 
+         * this endpoint just for update and cann't assign the employees
+         * to OUs and Divisions.
+         */
         url = '/login/updateemp/' + empId;
       }
+      method = 'PATCH';
       const createEmpObj = {
         userrole: userRole,
         divs: divsGroup,
         oudivs: orgUnitDivsGroup,
 
         // Never change the loginname.
+
+        /** 
+         * use MD5 hash encrypt the password ( user entry ),
+         * make sure don't pass clear text password
+         * through the internet.
+         */
         password: MD5(employeesInfo.password).toString(),
         email: employeesInfo.email,
         telephone: employeesInfo.telephone,
@@ -117,9 +146,19 @@ class CreateEmployee extends Component {
         firstname: employeesInfo.firstname,
         lastname: employeesInfo.lastname
       };
-      jsonEmpObj = JSON.stringify(createEmpObj);
+      body = JSON.stringify(createEmpObj);
     } else {
+
+      /**
+       * If haven't empId, this is create employee action.
+       * the endpoint is (/login/createuser)
+       * need assign and unassign right.
+       * 
+       * Has bug, If admin add a exist login, express will hange.
+       * next version need to debug it.
+       */
       url = '/login/createuser';
+      method = 'POST';
       const createEmpObj = {
         userrole: userRole,
         divs: divsGroup,
@@ -132,21 +171,17 @@ class CreateEmployee extends Component {
         firstname: employeesInfo.firstname,
         lastname: employeesInfo.lastname
       };
-      jsonEmpObj = JSON.stringify(createEmpObj);
+      body = JSON.stringify(createEmpObj);
     }
 
-    console.log("Url in CreateEmployee.")
-
-    console.log("handleButtonSubmit JSON: ", jsonEmpObj);
-
     fetch(url, {
-      method: 'POST',
+      method,
 
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: jsonEmpObj
+      body
     }).then(response => {
 
       if (!response.ok) {
@@ -165,9 +200,12 @@ class CreateEmployee extends Component {
     })
       
     this.props.onUpdateEmpList(divsGroup[0]);
+    // Cannot use this way to change Divisions label.
+    // this.props.onUpdateDivLabel(divsGroup[0]);
     this.props.onDisableForm();
   }
 
+  // when Select OU and Divisions information need user assign and unassign right.
   render() {
       const { orgUnitDivsGroup, orgUnitDivsSelect, 
         divsGroup, divsSelect, userRole, employeesInfo, errorMessage }  = this.state ;
@@ -175,27 +213,19 @@ class CreateEmployee extends Component {
 
       return (
         <>
+          {/* Show the Employee base information.*/}
           <ul>
             <li>Name: {employeesInfo.firstname}, {employeesInfo.lastname}</li>
             <li>Email: {employeesInfo.email}</li>
             <li>Address: {employeesInfo.address}</li>
             <li>Telephone: {employeesInfo.telephone}</li>
-            {/* <li>Loginname: {employeesInfo.loginname}</li>
-            <li>Lastname: {employeesInfo.lastname}</li>
-            <li>password: {employeesInfo.password}</li>
-            <li>user role: {userRole}</li>
-            {orgUnitDivsGroup.map(ous => (
-              <li>Org Units Divisions: <OuDivName oudivid={ous} /></li>
-            ))}
-            {divsGroup.map(dvs => (
-              <li>Divisions: <DivName divid={dvs} /></li>
-            ))} */}
           </ul>
 
           {errorMessage
           ? (<h2>{errorMessage}</h2>)
           : <></> }
 
+          {/* assign and unassign employee to OU and Divisions need right. */}
           {userRight.assign === "true" || userRight.unassign === "true"
           ? ( <>
             <div id="showoudivgroup">
@@ -242,9 +272,13 @@ class CreateEmployee extends Component {
           </>)
           : (<></>) }
           
+          {/**  
+            Show the base profile entry form. 
+            Every employees can show this parts.
+          */}
           <EmpRegForm empinfo={employeesInfo} onSelect={(emp) => this.setEmployeesInfo(emp)} />
           <hr/>
-          <button onClick={this.handleButtonSubmit}>Create Employee Account</button>
+          <button onClick={this.handleButtonSubmit}>Create or Update Employee Account</button>
 
         </>
       );

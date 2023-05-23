@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 dotenv.config();
 
-// Create a class called DbHandler.
+// Create a class called DbConnect.
 class DbConnect {
 
   constructor() {

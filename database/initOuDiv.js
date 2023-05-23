@@ -1,3 +1,9 @@
+/**
+ *  It then creates a database connection, 
+ * iterates over the `ouMap` and `divMap` maps, 
+ * and saves the Organisational Units and Divisions
+ * data objects to the database.
+ */
 import mongoose from 'mongoose';
 
 import {ouMap, divMap, ouDiv} from './ouDivData.js';
@@ -15,6 +21,11 @@ let returnDivObj = [];
 let returnOuDivObj = [];
 
 for (const [key, value] of ouMap) {
+  
+  /**
+   * Create a new Organisational Units object.
+   * follow ouMap and save to database.
+   */
     const record = new OrgUnits({
       _id: value,
       name: key
@@ -23,6 +34,7 @@ for (const [key, value] of ouMap) {
     returnOrgUnitsObj.push(obj);
 }
 
+// Iterate over the `divMap` map.
 for (const [key, value] of divMap) {
     const record = new Divisions({
       _id: value,

@@ -1,3 +1,10 @@
+/**
+ * The code you provided is correct. 
+ * It is a React component that displays the name of a division. 
+ * The component first fetches the name 
+ * of the division from the server. 
+ * When the component receives the name, it displays it in a span element.
+ */
 import React, { Component } from 'react';
 
 class DivName extends Component {
@@ -9,8 +16,9 @@ class DivName extends Component {
      this.fetchNames = this.fetchNames.bind(this);
   };
 
-  componentDidMount() {
-    this.fetchNames(this.props.divid);
+  // received divisions's id and find name in database.
+  async componentDidMount() {
+    await this.fetchNames(this.props.divid);
   }
 
   async fetchNames(urlEndPart) {
