@@ -208,14 +208,14 @@ class ListEmployees extends Component {
                 {displayForm
                 ? ( <CreateEmployee 
                       onUpdateEmpId={(empId) => this.updateSelfRegistration(empId)}
-                      onUpdateEmpList={(choicedDiv) => this.fetchNames(choicedDiv)} 
+                      onUpdateEmpList={async (choicedDiv) => await this.fetchNames(choicedDiv)} 
                       onUpdateDivLabel={(divid) => this.updateDivTitle(divid)}
                       empId={empId} onDisableForm={this.disableForm} /> )
                 : ( 
                     <>
 
                       {deleteMessage
-                      ? (<h2>{deleteMessage}</h2>)
+                      ? (<h2 className='careMessage'>{deleteMessage}</h2>)
                       : (<></>)
                       }
 

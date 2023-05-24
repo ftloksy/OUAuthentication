@@ -142,11 +142,29 @@ class  OrgUnitsAuth {
         lastname: req.body.lastname
       });
       
-      await record.save();
-      res.json({
-        msg: "Record Saved.",
-        id: genId.toString()
-      })
+      try {
+        await record.save()
+
+        req.foundObj = {
+            msg: "Record Saved.",
+            id: genId.toString()
+          }
+        
+        next();
+
+      } catch (err) {
+        
+        if ( err.code === 11000 ) {
+          console.log("When Create user, Error:", err.code);
+          console.log("{ loginname } duplicate key.");
+          res.status(400)
+          .json({errmessage: "{ loginname } duplicate key.",
+            code: err.code});
+        } else {
+          res.status(400)
+          .json({errmessage: "When Create user has bug."});
+        }
+      }
     }
   }
 

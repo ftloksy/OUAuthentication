@@ -185,24 +185,32 @@ class CreateEmployee extends Component {
     }).then(response => {
 
       if (!response.ok) {
-        throw Error(response.statusText);
-      };
+        //throw Error(response.statusText);
+        console.log("Error When Create User: ( Body ) ", 
+          response.statusText );
+        response.json().then( async data => {
+          console.log("JSON in ERROR CREATE USER.", data);
+          await this.setState({ errorMessage: data.errmessage})
+        });
+      } else {
 
-      response.json().then( data => {
-        if (!empId) {
-          this.props.onUpdateEmpId(data.id);
-        }
-        console.log('Update or Create Data: ', data);
-      });
+        response.json().then(async data => {
+          if (!empId) {
+            this.props.onUpdateEmpId(data.id);
+          } 
+
+          await this.setState({ errorMessage: "" });
+          this.props.onDisableForm();
+          this.props.onUpdateEmpList(divsGroup[0]);
+          this.props.onUpdateDivLabel(divsGroup[0])
+          console.log('Update or Create Data: ', data);
+        });
+      }
 
     }).catch (err => {
-      console.log("Error When Create User: ", err);
+      console.log("Error in CreateEmployee, create action.");
     })
       
-    this.props.onUpdateEmpList(divsGroup[0]);
-    // Cannot use this way to change Divisions label.
-    // this.props.onUpdateDivLabel(divsGroup[0]);
-    this.props.onDisableForm();
   }
 
   // when Select OU and Divisions information need user assign and unassign right.
@@ -222,7 +230,7 @@ class CreateEmployee extends Component {
           </ul>
 
           {errorMessage
-          ? (<h2>{errorMessage}</h2>)
+          ? (<h2 className="careMessage">{errorMessage}</h2>)
           : <></> }
 
           {/* assign and unassign employee to OU and Divisions need right. */}
