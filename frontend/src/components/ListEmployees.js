@@ -9,7 +9,8 @@
  */
 import React, { Component } from 'react';
 import CreateEmployee from './CreateEmployee';
-import DivName from './DivName';
+//import DivName from './DivName';
+import FetchDivisionById from '../lib/FetchDivisionById';
 import '../css/ListEmployees.css';
 
 class ListEmployees extends Component {
@@ -20,6 +21,7 @@ class ListEmployees extends Component {
         empId: "", // choiced employee to update or delete.
         deleteMessage: "", // when employee delete will update this msg.
         displayForm: false, // Display form for update and create employees.
+        showNowDivTitle: ""
     };
     this.enableForm = this.enableForm.bind(this);
     this.disableForm = this.disableForm.bind(this);
@@ -31,8 +33,10 @@ class ListEmployees extends Component {
     this.updateSelfRegistration = this.updateSelfRegistration.bind(this);
     this.showEmployeeInfo = this.showEmployeeInfo.bind(this);
     this.deleteEmployee = this.deleteEmployee.bind(this);
-
+    
     this.divName = React.createRef();
+
+    this.divByIdName = new FetchDivisionById();
 
     // Read token has the rights.
     this.userRight = {
@@ -45,8 +49,13 @@ class ListEmployees extends Component {
 
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+     const { choiceddiv } = this.props;
      this.fetchNames(this.props.choiceddiv);
+     const divTitle = await this.divByIdName.fetchDivById(choiceddiv);
+     this.setState({ 
+      showNowDivTitle: divTitle
+     })
   }
 
   // fetch divisions's employees from choicedDivId.
@@ -99,10 +108,11 @@ class ListEmployees extends Component {
   }
 
   // Delete the employee, and update the employees list.
-  async handleDeleteButtonClick(event, empId, loginname) {
+  async handleDeleteButtonClick(event, empId, loginname, choiceddiv) {
     event.preventDefault();
     await this.deleteEmployee(empId, loginname);
     await this.fetchNames(this.props.choiceddiv);
+    await this.updateDivTitle(this.props.choiceddiv);
   }
 
   // Close the update and create employee form.
@@ -136,9 +146,10 @@ class ListEmployees extends Component {
    * next time. I don't use components to handle it.
    */
   async updateDivTitle(urlEndPart) {
-    if ( this.divName.current ) {
-      await this.divName.current.fetchNames(urlEndPart);
-    }
+    const divTitle = await this.divByIdName.fetchDivById(urlEndPart);
+    this.setState({ 
+     showNowDivTitle: divTitle
+    })
   }
 
   /**
@@ -197,9 +208,12 @@ class ListEmployees extends Component {
 
   }
 
+  
+
   render() {
     
-        const { emps, empId, displayForm, deleteMessage } = this.state ;
+        const { emps, empId, showNowDivTitle,
+          displayForm, deleteMessage } = this.state ;
         const { choiceddiv } = this.props;
         const userRight = this.userRight ;
 
@@ -219,7 +233,16 @@ class ListEmployees extends Component {
                       : (<></>)
                       }
 
-                      <h2><DivName divid={choiceddiv} ref={this.divName}/></h2>
+                      {/* when employees has assign or unassign right show the button  */}
+                      {userRight.assign === "true" || userRight.unassign === "true"
+                      ? (
+                          <button onClick={(event) => this.handleUpdateButtonClick(event, "")}>
+                            Create a New Employees
+                          </button>
+                      )
+                      : (<></>)}
+
+                      <h2>{showNowDivTitle}</h2>
                       <ul>
                         {emps.map ( emp => (
                          <>
@@ -249,7 +272,8 @@ class ListEmployees extends Component {
                                     ? (
                                         <button 
                                           onClick={
-                                            (event) => this.handleDeleteButtonClick(event, emp._id, emp.loginname)
+                                            (event) => this.handleDeleteButtonClick(
+                                                event, emp._id, emp.loginname, emp.divs._id)
                                             }>
                                           Delete
                                         </button>
@@ -267,14 +291,6 @@ class ListEmployees extends Component {
                             </>
                         ))}
 
-                        {/* when employees has assign or unassign right show the button  */}
-                        {userRight.assign === "true" || userRight.unassign === "true"
-                        ? (<li>
-                            <button onClick={(event) => this.handleUpdateButtonClick(event, "")}>
-                              Create a New Employees
-                            </button>
-                        </li>)
-                        : (<></>)}
                       </ul>
                     </>)
                 }

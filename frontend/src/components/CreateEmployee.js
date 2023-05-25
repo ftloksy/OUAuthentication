@@ -153,9 +153,6 @@ class CreateEmployee extends Component {
        * If haven't empId, this is create employee action.
        * the endpoint is (/login/createuser)
        * need assign and unassign right.
-       * 
-       * Has bug, If admin add a exist login, express will hange.
-       * next version need to debug it.
        */
       url = '/login/createuser';
       method = 'POST';
@@ -202,7 +199,7 @@ class CreateEmployee extends Component {
           await this.setState({ errorMessage: "" });
           this.props.onDisableForm();
           this.props.onUpdateEmpList(divsGroup[0]);
-          this.props.onUpdateDivLabel(divsGroup[0])
+          this.props.onUpdateDivLabel(divsGroup[0]);
           console.log('Update or Create Data: ', data);
         });
       }

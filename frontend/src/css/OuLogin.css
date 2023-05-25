@@ -1,0 +1,7 @@
+.divisionslist {
+  display: flex;
+}
+
+.divisionslist > div {
+  padding: 20px;
+}

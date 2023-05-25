@@ -8,6 +8,7 @@ import { MD5 } from 'crypto-js';
 import ListEmployees from './ListEmployees';
 import DivName from './DivName';
 import FetchDivisions from '../lib/FetchDivisions';
+import '../css/OuLogin.css';
 
 class OuLogin extends Component {
     constructor(props) {
@@ -246,30 +247,36 @@ class OuLogin extends Component {
                     <h2>Update Your Self Registration Info.</h2>
                     <button onClick={(event) => this.updateSelfRegistrationInfo(event, selfEmpId)}>Update</button>
                     <hr/>
-                    <h2>Divisions:</h2>
-                    { assign || unassign
-                    ? (<ul>
-                        {allDivisions.map(dv => (
-                            <li>
-                                <button onClick={event => this.choiceDivListEmps(event, dv._id)}>
-                                    <DivName divid={dv._id} />
-                                </button>
-                            </li>
-                        ))}
-                    </ul>)
-                    : (<ul>
-                        {divisions.map(dv => (
-                            <li>
-                                <button onClick={event => this.choiceDivListEmps(event, dv)}>
-                                    <DivName divid={dv} />
-                                </button>
-                            </li>
-                        ))}
-                    </ul>) }
-                    <ListEmployees 
-                        selfempid={selfEmpId}
-                        choiceddiv={choicedDiv}
-                        ref={this.listEmployees} />
+                    <div className='divisionslist'>
+                        <div>
+                            <h2>Divisions:</h2>
+                            { assign || unassign
+                            ? (<ul>
+                                {allDivisions.map(dv => (
+                                    <li>
+                                        <button onClick={event => this.choiceDivListEmps(event, dv._id)}>
+                                            <DivName divid={dv._id} />
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>)
+                            : (<ul>
+                                {divisions.map(dv => (
+                                    <li>
+                                        <button onClick={event => this.choiceDivListEmps(event, dv)}>
+                                            <DivName divid={dv} />
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>) }
+                        </div>
+                        <div>
+                            <ListEmployees 
+                                selfempid={selfEmpId}
+                                choiceddiv={choicedDiv}
+                                ref={this.listEmployees} />
+                        </div>
+                    </div>
                 </>)
             : ( <form onSubmit={(event) => this.handleInputSubmit(event)}>
                     <h2>Login</h2>

@@ -4,12 +4,9 @@
  */
 import mongoose from 'mongoose';
 
-import DbConnect from './DbConnect.js';
-import { UserRoles } from '../models/OrgUnits.js';
+let userRole = []
 
-const dbConnect = new DbConnect();
-
-const normalRole = new UserRoles({
+userRole.push({
   _id: new mongoose.Types.ObjectId("6462525c64d9ec96a2338b6a"),
   role: "Normal",
   read: true,  // can read the credential repository,
@@ -23,12 +20,9 @@ const normalRole = new UserRoles({
    */
   assign: false, 
   unassign: false
-});
+}); 
 
-let obj = await normalRole.save();
-console.log(obj);
-
-const managementRole = new UserRoles({
+userRole.push({
   _id: new mongoose.Types.ObjectId("6462525c64d9ec96a2338b6e"),
   role: "Management",
   read: true,
@@ -38,10 +32,7 @@ const managementRole = new UserRoles({
   unassign: false
 });
 
-obj = await managementRole.save();
-console.log(obj);
-
-const adminRole = new UserRoles({
+userRole.push({
   _id: new mongoose.Types.ObjectId("6462525c64d9ec96a2338b70"),
   role: "Admin",
   read: true,
@@ -51,7 +42,4 @@ const adminRole = new UserRoles({
   unassign: true
 });
 
-obj = await adminRole.save();
-console.log(obj);
-
-dbConnect.closeDbConnection();
+export default userRole;

@@ -49,7 +49,7 @@ const ouDiv = [
              "Sales",
              "Finance",
              "IT",
-             "Human Resources",
+             "Human Resource",
              "Legal",
              "Compliance"
            ]
@@ -66,7 +66,7 @@ const ouDiv = [
              "Advertising",
              "Finance",
              "IT",
-             "Human Resources",
+             "Human Resource",
              "Legal"
           ]
         }

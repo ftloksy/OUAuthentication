@@ -12,7 +12,6 @@ const orgUnitsSchema = new Schema({
 const divisionsSchema = new Schema({
   _id: Schema.Types.ObjectId,
   name: { type: String, require: true },
-  credential: [ { type: Schema.Types.ObjectId, ref: "Employees" } ]
 });
 
 

@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import OuLogin from './components/OuLogin';
+import Footer from './pages/Footer';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <OuLogin />
         
       </header>
+      <Footer />
     </div>
   );
 }
