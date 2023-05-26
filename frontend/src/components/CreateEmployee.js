@@ -102,6 +102,11 @@ class CreateEmployee extends Component {
     let url = ''
     let body = '';
     let method = '';
+    let createEmpObj = {};
+
+    // if (employeesInfo.password === "*" * 10 ){
+    //   delete employeesInfo.password;
+    // }
 
     /**
      * If haven't empId, it is a create action.
@@ -125,7 +130,7 @@ class CreateEmployee extends Component {
         url = '/login/updateemp/' + empId;
       }
       method = 'PATCH';
-      const createEmpObj = {
+      createEmpObj = {
         userrole: userRole,
         divs: divsGroup,
         oudivs: orgUnitDivsGroup,
@@ -139,7 +144,14 @@ class CreateEmployee extends Component {
         firstname: employeesInfo.firstname,
         lastname: employeesInfo.lastname
       };
+
+      // When User reset his password, cann't use "*" * 10.
+      if ( createEmpObj.password === "*" * 10 ) {
+        delete createEmpObj.password;
+      }
+
       body = JSON.stringify(createEmpObj);
+
     } else {
 
       /**
@@ -149,7 +161,7 @@ class CreateEmployee extends Component {
        */
       url = '/login/createuser';
       method = 'POST';
-      const createEmpObj = {
+      createEmpObj = {
         userrole: userRole,
         divs: divsGroup,
         oudivs: orgUnitDivsGroup,
