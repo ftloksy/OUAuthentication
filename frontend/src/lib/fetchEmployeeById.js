@@ -81,7 +81,7 @@ class fetchEmployeeById {
                         address: data.address,
                         telephone: data.telephone,
                         loginname: data.loginname,
-                        password: "*" * 10,
+                        password: "*".repeat(10),
                       },
                     };
 

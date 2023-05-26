@@ -156,8 +156,6 @@ class  OrgUnitsAuth {
       } catch (err) {
         
         if ( err.code === 11000 ) {
-          console.log("When Create user, Error:", err.code);
-          console.log("{ loginname } duplicate key.");
           res.status(400)
           .json({errmessage: "{ loginname } duplicate key.",
             code: err.code});
@@ -249,7 +247,6 @@ class  OrgUnitsAuth {
   updateEmployee() {
     return (req, res, next) => {
       const updateObj = {
-        password: md5(req.body.password),
         email: req.body.email,
         telephone: req.body.telephone,
         address: req.body.address,
@@ -257,7 +254,14 @@ class  OrgUnitsAuth {
         lastname: req.body.lastname
       };
 
-      console.log(" UpdateEmployee: ", updateObj);
+      /** 
+       * If the web client update password,
+       * and the password !=== "*".repeat(10);
+       * add the new password to the updateObj
+       */
+      if (req.body.password) {
+        updateObj.password = md5(req.body.password);
+      };
 
       Employees.findByIdAndUpdate(req.params.empid, updateObj)
       .then((emp, err) => {
@@ -276,22 +280,6 @@ class  OrgUnitsAuth {
  * and attaches the updated user object to the request object 
  * for further processing.
  */
-
-
-// const createEmpObj = {
-//   userrole: userRole,
-//   divs: divsGroup,
-//   oudivs: orgUnitDivsGroup,
-
-//   // Never change the loginname.
-
-//   password: employeesInfo.password,
-//   email: employeesInfo.email,
-//   telephone: employeesInfo.telephone,
-//   address: employeesInfo.address,
-//   firstname: employeesInfo.firstname,
-//   lastname: employeesInfo.lastname
-// };
 
   regUser() {
     return (req, res, next) => {
@@ -487,7 +475,6 @@ class  OrgUnitsAuth {
  */
   deleteEmployee () {
     return (req, res, next) => {
-      console.log("In Delete Employee: ", req.params.empid);
       Employees.deleteOne({ _id: req.params.empid }) 
       .then((obj, err) => {
         req.err = err;

@@ -146,7 +146,7 @@ class CreateEmployee extends Component {
       };
 
       // When User reset his password, cann't use "*" * 10.
-      if ( createEmpObj.password === "*" * 10 ) {
+      if ( createEmpObj.password === "*".repeat(10) ) {
         delete createEmpObj.password;
       }
 
