@@ -63,7 +63,9 @@ const employeesSchema = new Schema({
 
   /** 
    * Use MD5 hash to encrypt the password.
-   * sure don't clear text password through the internet.
+   * sure don't save clear text password in database.
+   * If don't want clear text password through internet,
+   * need use SSL connection.
    */
   password: { type: String, required: true },
   email: String,

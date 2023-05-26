@@ -4,7 +4,6 @@
  */ 
 
 import React, { Component } from 'react';
-import { MD5 } from 'crypto-js';
 import ListEmployees from './ListEmployees';
 import DivName from './DivName';
 import FetchDivisions from '../lib/FetchDivisions';
@@ -105,14 +104,15 @@ class OuLogin extends Component {
     async storageToken(login, password) {
         console.log("login: " + login);
         console.log("Password: " + password);
-        const md5HashedPassword = MD5(password).toString();
+        //const md5HashedPassword = MD5(password).toString();
         try {
             const response = await fetch('/login/auth', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({password: md5HashedPassword, login})
+                //body: JSON.stringify({password: md5HashedPassword, login})
+                body: JSON.stringify({password, login})
             });
             if (response.ok) {
                 const data = await response.json();

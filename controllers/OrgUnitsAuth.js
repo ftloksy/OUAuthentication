@@ -8,6 +8,7 @@ import { Employees,
   OrgUnits,
   UserRoles } from '../models/OrgUnits.js';
 
+import md5 from '../helper/MD5.js';
 
 /**
  * The OrgUnitsAuth class provides various middleware functions
@@ -44,7 +45,7 @@ class  OrgUnitsAuth {
       .populate('userrole')
       .then((userObj) => {
         if (userObj) {
-          if (userObj.loginname === login && userObj.password === passwd ) {
+          if (userObj.loginname === login && userObj.password === md5(passwd)) {
             const loginToken = jwt.sign(
               {
                 id: userObj._id,
@@ -134,7 +135,7 @@ class  OrgUnitsAuth {
         divs: req.body.divs,
         oudivs: req.body.oudivs,
         loginname: req.body.loginname,
-        password: req.body.password,
+        password: md5(req.body.password),
         email: req.body.email,
         telephone: req.body.telephone,
         address: req.body.address,
@@ -248,7 +249,7 @@ class  OrgUnitsAuth {
   updateEmployee() {
     return (req, res, next) => {
       const updateObj = {
-        password: req.body.password,
+        password: md5(req.body.password),
         email: req.body.email,
         telephone: req.body.telephone,
         address: req.body.address,
@@ -275,8 +276,30 @@ class  OrgUnitsAuth {
  * and attaches the updated user object to the request object 
  * for further processing.
  */
+
+
+// const createEmpObj = {
+//   userrole: userRole,
+//   divs: divsGroup,
+//   oudivs: orgUnitDivsGroup,
+
+//   // Never change the loginname.
+
+//   password: employeesInfo.password,
+//   email: employeesInfo.email,
+//   telephone: employeesInfo.telephone,
+//   address: employeesInfo.address,
+//   firstname: employeesInfo.firstname,
+//   lastname: employeesInfo.lastname
+// };
+
   regUser() {
     return (req, res, next) => {
+
+      if (req.body.password) {
+        req.body.password = md5(req.body.password);
+      };
+
       Employees.findByIdAndUpdate(req.params.uid, req.body)
       .then((emp, err) => {
         req.err = err;

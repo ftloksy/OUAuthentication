@@ -8,7 +8,6 @@
  * The parent component can then use these values to create a new employee.
  */
 import React, { Component } from 'react';
-import { MD5 } from 'crypto-js';
 
 import SetOuDivGroup from './SetOuDivGroup';
 import SetDivGroup from './SetDivGroup';
@@ -94,7 +93,6 @@ class CreateEmployee extends Component {
 
   async handleButtonSubmit(event) {
     event.preventDefault();
-    //const token = localStorage.getItem('token');
     const token = this.token;
     const { empId } = this.props;
     
@@ -134,12 +132,7 @@ class CreateEmployee extends Component {
 
         // Never change the loginname.
 
-        /** 
-         * use MD5 hash encrypt the password ( user entry ),
-         * make sure don't pass clear text password
-         * through the internet.
-         */
-        password: MD5(employeesInfo.password).toString(),
+        password: employeesInfo.password,
         email: employeesInfo.email,
         telephone: employeesInfo.telephone,
         address: employeesInfo.address,
@@ -161,7 +154,7 @@ class CreateEmployee extends Component {
         divs: divsGroup,
         oudivs: orgUnitDivsGroup,
         loginname: employeesInfo.loginname,
-        password: MD5(employeesInfo.password).toString(),
+        password: employeesInfo.password,
         email: employeesInfo.email,
         telephone: employeesInfo.telephone,
         address: employeesInfo.address,
@@ -182,7 +175,6 @@ class CreateEmployee extends Component {
     }).then(response => {
 
       if (!response.ok) {
-        //throw Error(response.statusText);
         console.log("Error When Create User: ( Body ) ", 
           response.statusText );
         response.json().then( async data => {
