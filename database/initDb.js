@@ -19,6 +19,7 @@ function getOneOrThree() {
   return randomNumber;
 }
 
+// all Employees.
 const emps = [
   {
     address: "123 Maple Street",
@@ -163,6 +164,7 @@ const emps = [
 let empsObj = [];
 let loginnamesPool = [];
 
+// create Employees Objs Array.
 emps.forEach(emp => {
   const { address, firstName, lastName, telephone } = emp;
   const loginname = firstName.toLowerCase();
@@ -207,6 +209,7 @@ emps.forEach(emp => {
 
 });
 
+// assign the admin user right.
 empsObj[0].userrole = userRole[2]._id;
 console.log(empsObj[0].loginname + " is " + userRole[2].role);
 
@@ -225,6 +228,7 @@ console.log(empsObj[4].loginname + " is " + userRole[1].role);
 empsObj[5].userrole = userRole[1]._id;
 console.log(empsObj[5].loginname + " is " + userRole[1].role);
 
+// save all objs to database.
 for (let i = 0; i < userRole.length; i++ ) {
   const record = new UserRoles(userRole[i]);
   await record.save();

@@ -22,7 +22,6 @@ for (const [key, value] of ouMap) {
       _id: value,
       name: key
     }
-    //const obj = await record.save();
     OrgUnitsObj.push(record);
 }
 
@@ -32,7 +31,6 @@ for (const [key, value] of divMap) {
       _id: value,
       name: key
     }
-    //const obj = await record.save();
     DivObj.push(record);
 }
 
@@ -43,11 +41,8 @@ for (let i = 0; i < ouDiv.length ; i ++) {
       orgunits: ouMap.get(ouDiv[i].ou),
       divisions: divMap.get(ouDiv[i].div[j])
     }
-    //const obj = await record.save();
     OuDivObj.push(record);
   }
 }
-
-//dbConnect.closeDbConnection();
 
 export { OrgUnitsObj, DivObj, OuDivObj };

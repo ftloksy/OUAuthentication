@@ -75,6 +75,14 @@ To set up the project locally, follow these steps:
   
            npm run initdb 
 
+          (console reponse)
+          john is Admin
+          emily is Admin
+          michael is Management
+          emma is Management
+          daniel is Management
+          olivia is Management
+
     This script will populate the database with initial data, 
     including employees and their respective user roles, 
     organisational units (OU) and divisions . 
@@ -88,7 +96,6 @@ To set up the project locally, follow these steps:
     Please note that the password for all employees, including the admin and management, 
     is set to '123456'.
 
-
     During development, 
     you can use the following login credentials to access the frontend: 
     login: 'emily' and password: '123456'.
@@ -96,6 +103,9 @@ To set up the project locally, follow these steps:
     It's important to note that when resetting passwords, 
     employees (including the admin) cannot use the 
     password '**********' (ten asterisks) as their new password.
+
+    and Admin can not create two employees has same loginname,
+    and after create employees, employees's loginname cann't change.
 
 ### Please note the following restrictions:
 
