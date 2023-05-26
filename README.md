@@ -67,6 +67,51 @@ To set up the project locally, follow these steps:
   - __Start the server:__ npm start
     Access the application at http://localhost:3000 (or the specified port).
 
+## Initialize the database
+
+"To initialize the database for this project, follow the steps below:
+
+  -  Run the command in the project's root directory.
+  
+           npm run initdb 
+
+    This script will populate the database with initial data, 
+    including employees and their respective user roles, 
+    organisational units (OU) and divisions . 
+
+### Admin and Employees
+
+    Two user will have the role of 'admin':  "emily" and "john", 
+    Four user will have the role of 'Management': "michael", "emma", "daniel", "olivia"
+    
+    while all other employees will have the role of 'normal' (user role). 
+    Please note that the password for all employees, including the admin and management, 
+    is set to '123456'.
+
+
+    During development, 
+    you can use the following login credentials to access the frontend: 
+    login: 'emily' and password: '123456'.
+
+    It's important to note that when resetting passwords, 
+    employees (including the admin) cannot use the 
+    password '**********' (ten asterisks) as their new password.
+
+### Please note the following restrictions:
+
+    __User Role Permissions:__ The management users have the ability to 
+    update user profiles within their respective divisions. 
+    However, they cannot update user profiles in other divisions 
+    or modify the profiles of admin users in all divisions.
+
+    __Restricted Access to Admin Profiles:__ At all times, 
+    management users are prohibited from updating the profiles of admin users.
+
+Please ensure you have MongoDB installed and running before executing 
+the npm run initdb command. This will create the necessary collections 
+and populate them with the initial data, 
+allowing you to start the project with a preconfigured database."
+
 ## Security Considerations
 
  - __Protect sensitive information:__ Apply encryption and secure storage mechanisms 
