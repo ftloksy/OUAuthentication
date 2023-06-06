@@ -83,38 +83,38 @@ To set up the project locally, follow these steps:
           daniel is Management
           olivia is Management
 
-    This script will populate the database with initial data, 
-    including employees and their respective user roles, 
-    organisational units (OU) and divisions . 
+ This script will populate the database with initial data, 
+ including employees and their respective user roles, 
+ organisational units (OU) and divisions . 
 
 ### Admin and Employees
 
-    Two user will have the role of 'admin':  "emily" and "john", 
-    Four user will have the role of 'Management': "michael", "emma", "daniel", "olivia"
+Two user will have the role of 'admin':  "emily" and "john", 
+Four user will have the role of 'Management': "michael", "emma", "daniel", "olivia"
     
-    while all other employees will have the role of 'normal' (user role). 
-    Please note that the password for all employees, including the admin and management, 
-    is set to '123456'.
+while all other employees will have the role of 'normal' (user role). 
+Please note that the password for all employees, including the admin and management, 
+is set to '123456'.
 
-    During development, 
-    you can use the following login credentials to access the frontend: 
-    login: 'emily' and password: '123456'.
+During development, 
+you can use the following login credentials to access the frontend: 
+login: 'emily' and password: '123456'.
 
-    It's important to note that when resetting passwords, 
-    employees (including the admin) cannot use the 
-    password '**********' (ten asterisks) as their new password.
+It's important to note that when resetting passwords, 
+employees (including the admin) cannot use the 
+password '**********' (ten asterisks) as their new password.
 
-    and Admin can not create two employees has same loginname,
-    and after create employees, employees's loginname cann't change.
+and Admin can not create two employees has same loginname,
+and after create employees, employees's loginname cann't change.
 
 ### Please note the following restrictions:
 
-    __User Role Permissions:__ The management users have the ability to 
+ __User Role Permissions:__ The management users have the ability to 
     update user profiles within their respective divisions. 
     However, they cannot update user profiles in other divisions 
     or modify the profiles of admin users in all divisions.
 
-    __Restricted Access to Admin Profiles:__ At all times, 
+ __Restricted Access to Admin Profiles:__ At all times, 
     management users are prohibited from updating the profiles of admin users.
 
 Please ensure you have MongoDB installed and running before executing 
@@ -136,10 +136,10 @@ please submit an issue or create a pull request.
 
 When contributing, please adhere to the following guidelines:
 
-    Fork the repository and create a new branch for your feature or bug fix.
-    Ensure your code follows the project's coding style and best practices.
-    Provide detailed documentation and comments as necessary.
-    Write appropriate tests for new features or bug fixes.
+ - Fork the repository and create a new branch for your feature or bug fix.
+ - Ensure your code follows the project's coding style and best practices.
+ - Provide detailed documentation and comments as necessary.
+ - Write appropriate tests for new features or bug fixes.
 
 ## License
 
